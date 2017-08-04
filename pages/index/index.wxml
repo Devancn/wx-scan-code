@@ -1,0 +1,129 @@
+<!--分类菜单  -->
+<scroll-view class="category-menu" scroll-y="true" scroll-with-animation="true">
+  <view wx:for="{{categoryMenu}}" wx:key="index" class="item {{index === curCategory.index ? 'active': ''}}" data-view="cateTop" data-index="{{index}}"  bindtap="switchTab">
+    <text wx:if="{{item.name}}">{{item.name}}</text>
+    <text wx:if="{{item.translate}}" class="translate">{{item.translate}}</text>
+  </view>
+</scroll-view>
+
+<!-- 分类详情 -->
+<scroll-view class="category-detail" scroll-y="true" scroll-with-animation="true" scroll-into-view="{{toView}}">
+  <view class="class-item" id="cateTop">
+      <text class="class-title">{{curCategory.name}} - {{curCategory.translate}} ({{curCategory.num}})</text>
+      <block wx:for="{{categoryDetail}}" wx:key="index">
+        <view class="goods" wx:if="{{curCategory.id === item.cid}}"> 
+          <view class="goods-img-area"> 
+            <image src="{{item.goodsImg}}"></image>
+            <text class="img-desc">{{item.goodsDesc}}</text>
+          </view>
+          <view class="goods-title-area">
+            <view class="title {{item.isGood ? 'praise' : ''}}">
+              <text><text class="iconfont" wx:for="{{item.spicy}}"  wx:key="index"></text>{{item.goodsName}}</text>
+            </view>
+            <view class="control-price">
+              <view class="price">
+                <text class="mark">¥</text>    
+                <text>{{item.price}}</text>
+              </view>  
+              <view class="control-button">
+                <block wx:if="{{item.num !== 0}}">
+                  <view class="iconfont control-reduce {{item.norm || item.isPackage ? 'forbid' : ''}}" bindtap="{{item.norm || item.isPackage ? 'forbidDel' : 'goodsHandle'}}" data-control="red"  data-itemindex="{{index}}"></view>
+                  <text class="control-text">{{item.num}}</text>
+                  <text wx:if="{{forbidTip.show}}" class="forbid-tips" style="top:{{forbidTip.offsetTop + 'px'}}">多规格商品只能去购物车删除哦</text>
+                </block>
+                <block wx:if="{{item.isPackage}}">
+                  <navigator url="/pages/package/package?id={{item.id}}" class="iconfont control-increase" hover-class="none"></navigator >
+                </block>
+                <block wx:else>
+                  <view class="iconfont control-increase" bindtap="goodsHandle" data-control="add" data-itemindex="{{index}}"></view>
+                </block>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+  </view>
+</scroll-view>
+    
+<!--底部  -->
+<view class="footer">  
+  <view class="btn-car" catchtap="showCar">
+    <view class="iconfont"></view>  
+    <text class="num">{{cartStatistisc.amount}}</text>
+  </view>
+  <text class="btn-base btn-view">查看订单</text>
+</view>
+  
+<!--购物车  -->
+<view class="layer-area layer-action-sheet" wx:if="{{layer.actionSheet}}">
+  <view class="layer-shade" catchtap="closeActionSheet"></view>
+  <view class="layer-page">
+    <view class="layer-page-header">
+      <view class="header-left">
+        <text class="titile">总计</text>
+        <text class="value">¥<text class="text">{{cartStatistisc.price}}</text></text>
+      </view>
+      <view class="header-right" bindtap="{{carList.length ? 'emptyCart' : ''}}">
+        <text class="iconfont"></text>
+        <text>清空</text>   
+      </view>
+    </view>
+    <scroll-view class="layer-page-content" scroll-y="true" scroll-with-animation="true">
+      <view class="item" wx:for="{{carList}}" wx:key="index">
+        <view class="item-left">
+          <text class="sup">{{item.name}}</text>
+            <text class="sub" wx:if="{{item.norm}}">
+              <text  wx:for="{{item.norm}}" wx:key="index">{{item}}；</text>
+            </text> 
+        </view>
+        <view class="total-text">¥<text class="text">{{item.price}}</text></view>
+        <view class="control-button">
+          <view class="iconfont control-reduce" bindtap="cartHandle" data-index="{{index}}" data-control="red"></view>
+          <text class="control-text">{{item.num}}</text>
+          <view class="iconfont control-increase" bindtap="cartHandle" data-index="{{index}}" data-control="add"></view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>
+
+<!--确认弹窗  -->
+<view class="layer-area layer-confirm" wx:if="{{layer.confirm}}">
+  <view class="layer-shade"></view>
+  <view class="layer-page">
+    <view class="layer-page-content">清空购物车</view>
+    <view class="layer-button">
+      <view class="btn" data-cancel bindtap="cancelAction">取消</view>
+      <view class="btn" data-confirm bindtap="confirmAction">确定</view>
+    </view>
+  </view>
+</view> 
+
+<!--规格弹窗  -->
+<view class="layer-area layer-goods-style" wx:if="{{layer.norm.show}}">
+  <view class="layer-shade"></view>
+  <view class="layer-page">
+    <view class="layer-page-title">
+      <text class="title-txt">{{layer.norm.data.name}}</text>
+      <view class="iconfont close" bindtap="closeStyle"></view>
+    </view>
+    <scroll-view class="layer-page-content" scroll-y="true" scroll-with-animation="true" id="test">
+      <view class="scroll-item" wx:for="{{layer.norm.data.style}}"  wx:key="index" wx:for-item="item1" wx:for-index="index1">
+        <text class="style-name">{{item1.name}}</text>
+        <view class="style-group" >
+          <block wx:for="{{item1.value}}"  wx:key="index" wx:for-item="item2">
+            <view class="style-item {{index === item1.chkIndex ? 'active' : ''}}" bindtap="tapItem" data-index="{{index}}" data-gouropIndex="{{index1}}">{{item2}}</view>
+          </block>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="botttom-message">
+      <view class="price-box">
+        <text class="symbol">¥</text>
+        <text class="price">{{layer.norm.data.price}}</text>
+      </view>
+      <view class="btn-base" catchtap="selectOk">选好了</view>
+    </view>
+  </view>
+</view>
+

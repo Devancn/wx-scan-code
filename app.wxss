@@ -1,0 +1,191 @@
+page {
+  font-family: Helvetica Neue,Helvetica,STHeiTi,Arial,sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  height: 100%;
+}
+scroll-view,view{
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/*
+字体图标库
+*/
+
+@font-face {
+  font-family: 'iconfont';  /* project id 243122 */
+  src: url('//at.alicdn.com/t/font_cu83ea8irvmcmcxr.eot');
+  src: url('//at.alicdn.com/t/font_cu83ea8irvmcmcxr.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_cu83ea8irvmcmcxr.woff') format('woff'),
+  url('//at.alicdn.com/t/font_cu83ea8irvmcmcxr.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_cu83ea8irvmcmcxr.svg#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.control-button {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end;
+  -webkit-box-align: center;
+  align-items: center;
+  width: 86px;
+  height: 40rpx;
+}
+
+.control-button .iconfont {
+  padding: 5px 0;
+  font-size: 24px;
+  color: #dd2726;
+}
+
+.control-button .iconfont.control-reduce::after {
+  content: '\e607';
+}
+
+.control-button .iconfont.control-increase::after {
+  content: '\e606';
+}
+
+.control-button .control-text {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+  margin: 0 5px;
+  text-align: center;
+}
+
+/*按钮  */
+
+.btn-base {
+  background-color: #dd2726;
+}
+
+.btn-base:active {
+  background-color: #dd2726;
+}
+
+/*弹窗  */
+
+.layer-area {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 90;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
+.layer-shade {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 91;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.layer-page {
+  position: relative;
+  background-color: #fff;
+  overflow: hidden;
+  width: 80%;
+  text-align: left;
+  z-index: 92;
+}
+
+.layer-page-content {
+  font-size: 14px;
+}
+
+.layer-button {
+  position: relative;
+  font-size: 18px;
+  line-height: 48px;
+  text-align: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.layer-button::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 0;
+  width: 100%;
+  border-bottom: 1px solid #eee;
+  -webkit-transform: scaleY(0.5);
+  transform: scaleY(0.5);
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+}
+
+.layer-button .btn {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+  padding: 0 15px;
+  color: #000;
+}
+
+.layer-button .btn[data-cancel] {
+  color: #999;
+}
+
+.layer-button .btn[data-confirm] {
+  position: relative;
+  color: #dd2726;
+}
+.layer-button .btn[data-confirm]::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 100%;
+  border-right: 1px solid #eee;
+  -webkit-transform: scaleX(.5);
+  transform: scaleX(.5);
+  left: 0;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+}
+/*确认弹窗  */
+
+.layer-area.layer-confirm .layer-page-content {
+  padding: 40px 15px;
+  font-size: 16px;
+  color: #333;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.layer-confirm .layer-page {
+  border-radius: 4px;
+}
+
+
