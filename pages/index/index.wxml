@@ -32,7 +32,7 @@
                   <text wx:if="{{forbidTip.show}}" class="forbid-tips" style="top:{{forbidTip.offsetTop + 'px'}}">多规格商品只能去购物车删除哦</text>
                 </block>
                 <block wx:if="{{item.isPackage}}">
-                  <navigator url="/pages/package/package?id={{item.id}}" class="iconfont control-increase" hover-class="none"></navigator >
+                  <view class="iconfont control-increase" bindtap="navigatorHandle" data-itemindex="{{index}}"></view >
                 </block>
                 <block wx:else>
                   <view class="iconfont control-increase" bindtap="goodsHandle" data-control="add" data-itemindex="{{index}}"></view>
@@ -107,7 +107,7 @@
       <text class="title-txt">{{layer.norm.data.name}}</text>
       <view class="iconfont close" bindtap="closeStyle"></view>
     </view>
-    <scroll-view class="layer-page-content" scroll-y="true" scroll-with-animation="true" id="test">
+    <scroll-view class="layer-page-content" scroll-y="true" scroll-with-animation="true">
       <view class="scroll-item" wx:for="{{layer.norm.data.style}}"  wx:key="index" wx:for-item="item1" wx:for-index="index1">
         <text class="style-name">{{item1.name}}</text>
         <view class="style-group" >

@@ -1,7 +1,8 @@
 {
   "pages":[
-    "pages/index/index",
-    "pages/package/package"
+    "pages/package/package",
+    "pages/index/index"
+  
   ],
   "window":{
     "backgroundTextStyle":"light",

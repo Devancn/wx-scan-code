@@ -1,3 +1,65 @@
-<view class="classname">
-  package
+<view class="package-page">
+  <!--组合销售  -->
+  <view class="group-item all" wx:for="[,,,]" wx:key="index" data-open="true">
+    <!--组合销售start  -->
+    <view class="group-title" wx:if="{{false}}">
+      <text class="titile-left">
+         <text>午市豪华套餐 - 3选2</text> 
+      </text>
+      <view class="titile-right">重选</view>
+    </view>
+    <!--组合销售end  -->
+    <!--整单销售start  -->
+    <view class="group-title" wx:if="{{true}}">
+      <text>整单销售</text> 
+    </view>
+    <!--整单销售end  -->
+    <view class="group-content">
+      <view class="content-list" data-check="true">
+        <text class="content-left">农夫山泉</text>
+        <view class="btn-right">
+          <view class="iconfont"></view>
+        </view>
+      </view>
+      <view class="content-list" data-check="true">
+        <view class="content-left">
+          <text>农夫山泉</text>
+          <view class="remarks">
+            <text>中份；中杯</text>
+          </view>
+        </view>
+        <view class="btn-right">
+          <view class="btn-base" bindtap="openStyle">规格</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+<!--规格弹窗  -->
+<view class="layer-area layer-goods-style" wx:if="{{layer.norm.show}}">
+  <view class="layer-shade"></view>
+  <view class="layer-page">
+    <view class="layer-page-title">
+      <text class="title-txt">{{layer.norm.data.name}}</text>
+      <view class="iconfont close" bindtap="closeStyle"></view>
+    </view>
+    <scroll-view class="layer-page-content" scroll-y="true" scroll-with-animation="true">
+      <view class="scroll-item" wx:for="{{layer.norm.data.style}}"  wx:key="index" wx:for-item="item1" wx:for-index="index1">
+        <text class="style-name">{{item1.name}}</text>
+        <view class="style-group" >
+          <block wx:for="{{item1.value}}"  wx:key="index" wx:for-item="item2">
+            <view class="style-item {{index === item1.chkIndex ? 'active' : ''}}" bindtap="tapItem" data-index="{{index}}" data-gouropIndex="{{index1}}">{{item2}}</view>
+          </block>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="botttom-message">
+      <view class="price-box"></view>
+      <view class="btn-base" catchtap="selectOk">选好了</view>
+    </view>
+  </view>
+</view>
+
+  <!--页面底部按钮  -->
+  <view class="footer-btn-ok">选好了</view>
 </view>

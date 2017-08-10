@@ -8,8 +8,6 @@ Page({
   data: {
     // 滚动到某个位置
     toView:"",
-    // 商家名称
-    branchName: "宁波研发园店 ",
     // 当前分类
     curCategory: {
       index: 0,
@@ -795,7 +793,7 @@ Page({
    */
   onLoad() {
     wx.setNavigationBarTitle({
-      title: this.data.branchName,
+      title: "宁波研发园店",
     })
   },
 
@@ -803,6 +801,8 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady() {
+    // 异步获取api  把数据存入storage
+
     let that = this;
     let categoryMenu = that.data.categoryMenu;
     let curCategory = categoryMenu[0];
@@ -810,13 +810,14 @@ Page({
     curCategory.index = 0;
     setData["curCategory"] = curCategory;
     that.setData(setData);
+
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+  
   },
   /**
    * 生命周期函数--监听页面隐藏
@@ -1085,5 +1086,16 @@ Page({
       setData["forbidTip.offsetTop"] = 0;
       that.setData(setData);
     },1500);
+  },
+  // 选择套餐
+  navigatorHandle(event){
+    let that = this;
+    let curIndex = event.target.dataset.itemindex
+    let curItem = that.data.categoryDetail[curIndex];
+    // 把当前选择的套餐保存在本地
+    wx.setStorageSync("curItem", JSON.stringify(curItem));
+    wx.navigateTo({
+      url: '/pages/package/package'
+    })
   }
 })
