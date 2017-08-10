@@ -27,11 +27,11 @@
               </view>  
               <view class="control-button">
                 <block wx:if="{{item.num !== 0}}">
-                  <view class="iconfont control-reduce {{item.norm || item.isPackage ? 'forbid' : ''}}" bindtap="{{item.norm || item.isPackage ? 'forbidDel' : 'goodsHandle'}}" data-control="red"  data-itemindex="{{index}}"></view>
+                  <view class="iconfont control-reduce {{item.norm || item.packageData ? 'forbid' : ''}}" bindtap="{{item.norm || item.packageData ? 'forbidDel' : 'goodsHandle'}}" data-control="red"  data-itemindex="{{index}}"></view>
                   <text class="control-text">{{item.num}}</text>
                   <text wx:if="{{forbidTip.show}}" class="forbid-tips" style="top:{{forbidTip.offsetTop + 'px'}}">多规格商品只能去购物车删除哦</text>
                 </block>
-                <block wx:if="{{item.isPackage}}">
+                <block wx:if="{{item.packageData}}">
                   <view class="iconfont control-increase" bindtap="navigatorHandle" data-itemindex="{{index}}"></view >
                 </block>
                 <block wx:else>
@@ -72,9 +72,7 @@
       <view class="item" wx:for="{{carList}}" wx:key="index">
         <view class="item-left">
           <text class="sup">{{item.name}}</text>
-            <text class="sub" wx:if="{{item.norm}}">
-              <text  wx:for="{{item.norm}}" wx:key="index">{{item}}；</text>
-            </text> 
+            <text class="sub" wx:if="{{item.normText}}">{{item.normText}}</text> 
         </view>
         <view class="total-text">¥<text class="text">{{item.price}}</text></view>
         <view class="control-button">

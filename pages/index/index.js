@@ -7,13 +7,13 @@ Page({
    */
   data: {
     // 滚动到某个位置
-    toView:"",
+    toView: "",
     // 当前分类
     curCategory: {
       index: 0,
-      name:'',
+      name: '',
       num: 0,
-      translate:''
+      translate: ''
     },
     // 多规格删除提示
     forbidTip: {
@@ -30,7 +30,7 @@ Page({
       }
     },
     // 购物车统计
-    cartStatistisc:{
+    cartStatistisc: {
       amount: 0,
       price: "0.00"
     },
@@ -39,7 +39,7 @@ Page({
       {
         id: 1,
         name: '套餐',
-        translate: 'Package',
+        translate: 'packageData',
         num: 3
       },
       {
@@ -166,7 +166,14 @@ Page({
         spicy: 3,
         price: "106.00",
         num: 0,
-        isPackage: true
+        packageData: {
+          combination: false,
+          packageName: "整单销售",
+          list: [
+            { itemName: "盐烤原味新西兰青口贝" },
+            { itemName: "照烧黄共鱼", norm: [{ name: "铁板做法", value: ["铁板", "盐烧"], chkIndex: 0 }, { name: "温度", value: ["常温", "冰镇", "加热"],  chkIndex: 0}], checkNorm: ["铁板", "常温"], normText:"铁板；常温"}
+          ]
+        }
       },
       {
         id: 4,
@@ -222,7 +229,48 @@ Page({
         spicy: 3,
         price: "106.00",
         num: 0,
-        isPackage: true
+        packageData: {
+          combination: true,
+          packageDataName: "喷火龙霸王骨",
+          groupItem: [
+            {
+              checkName: "小吃",
+              checkNum: 1,
+              list: [
+                { itemName: "够粗的美式薯条 (原味、麻辣)", checked: false },
+                { itemName: "美味薯丸", checked: false }
+              ]
+            },
+            {
+              checkName: "烤肉",
+              checkNum: 2,
+              list: [
+                { itemName: "招牌过木架烤三角肥牛2000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"] },], checked: false },
+                { itemName: "果木烤金蒜牛扒", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"] },], checked: false },
+                { itemName: "招牌过木架烤三角肥牛", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"] },], checked: false },
+                { itemName: "招牌过木架烤三角肥牛1000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"] },], checked: false }
+              ]
+            },
+            {
+              checkName: "酒水",
+              checkNum: 2,
+              list: [
+                { itemName: "青岛啤酒", checked: false },
+                { itemName: "莫拉利白葡萄酒", checked: false },
+                { itemName: "喜力啤酒", checked: false }
+              ]
+            },
+            {
+              checkName: "奇葩表情",
+              checkNum: 2,
+              list: [
+                { itemName: "哈哈哈", norm: [{ name: "类型", value: ["哈", "哈哈", "哈哈哈", "哈哈哈哈"] },], checked: false },
+                { itemName: "呵呵呵", checked: false },
+                { itemName: "嘎嘎嘎", checked: false }
+              ]
+            }
+          ]
+        }
       },
       {
         id: 7,
@@ -278,7 +326,7 @@ Page({
         spicy: 3,
         price: "106.00",
         num: 0,
-        isPackage: true
+        packageData: true
       },
       {
         id: 10,
@@ -334,7 +382,7 @@ Page({
         spicy: 3,
         price: "106.00",
         num: 0,
-        isPackage: true
+        packageData: true
       },
       {
         id: 13,
@@ -390,7 +438,7 @@ Page({
         spicy: 3,
         price: "106.00",
         num: 0,
-        isPackage: true
+        packageData: true
       },
       {
         id: 16,
@@ -446,7 +494,7 @@ Page({
         spicy: 3,
         price: "106.00",
         num: 0,
-        isPackage: true
+        packageData: true
       },
       {
         id: 19,
@@ -502,7 +550,7 @@ Page({
         spicy: 3,
         price: "106.00",
         num: 0,
-        isPackage: true
+        packageData: true
       },
       {
         id: 22,
@@ -558,7 +606,7 @@ Page({
         spicy: 3,
         price: "106.00",
         num: 0,
-        isPackage: true
+        packageData: true
       },
       {
         id: 25,
@@ -614,7 +662,7 @@ Page({
         spicy: 3,
         price: "106.00",
         num: 0,
-        isPackage: true
+        packageData: true
       },
       {
         id: 28,
@@ -670,7 +718,7 @@ Page({
         spicy: 3,
         price: "106.00",
         num: 0,
-        isPackage: true
+        packageData: true
       },
       {
         id: 31,
@@ -726,7 +774,7 @@ Page({
         spicy: 3,
         price: "106.00",
         num: 0,
-        isPackage: true
+        packageData: true
       },
       {
         id: 34,
@@ -782,7 +830,7 @@ Page({
         spicy: 3,
         price: "106.00",
         num: 0,
-        isPackage: true
+        packageData: true
       },
     ],
     //购物车列表
@@ -817,7 +865,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-  
+
   },
   /**
    * 生命周期函数--监听页面隐藏
@@ -854,7 +902,7 @@ Page({
 
   },
   // 分类选择
-  switchTab(event){
+  switchTab(event) {
     let that = this;
     let setData = {};
     let view = event.currentTarget.dataset.view;
@@ -961,7 +1009,7 @@ Page({
     }
   },
   //购物车列表控制器按钮
-  cartHandle(event){
+  cartHandle(event) {
     let that = this;
     let index = event.target.dataset.index;
     let control = event.target.dataset.control;
@@ -976,11 +1024,11 @@ Page({
         setData["categoryDetail[" + curIndex + "].num"] = curItem.num - 1;
         that.cartCount(setData, curIndex, control);
         return false;
-      }else{
+      } else {
         setData["carList[" + index + "].num"] = carList[index].num - 1;
         setData["categoryDetail[" + curIndex + "].num"] = curItem.num - 1;
       }
-    }else{
+    } else {
       setData["carList[" + index + "].num"] = carList[index].num + 1;
       setData["categoryDetail[" + curIndex + "].num"] = curItem.num + 1;
     }
@@ -992,7 +1040,7 @@ Page({
    * curIndex: 商品列表的index
    * control： 是添加还是减少
    */
-  cartCount(setData, curIndex, control){
+  cartCount(setData, curIndex, control) {
     let that = this;
     let carList = that.data.carList;
     let cartStatistisc = that.data.cartStatistisc;
@@ -1002,13 +1050,13 @@ Page({
     let tmpPrice = Number(cartStatistisc.price);
     let curPrice = Number(curItem.price);
     if (control === "red") {
-      tmpNum -=1;
+      tmpNum -= 1;
       tmpPrice -= curPrice;
-    }else {
+    } else {
       tmpNum += 1;
       tmpPrice += curPrice;
     }
-      //计算最后把总价转为字符型
+    //计算最后把总价转为字符型
     tmpPrice = tmpPrice.toFixed(2);
     cartStatistisc.price = tmpPrice;
     cartStatistisc.amount = tmpNum;
@@ -1027,7 +1075,7 @@ Page({
       if (norm) {
         //是多规格商品时，判断商品id是不是同一个，再判断选在的商品规格是否在购物车已经存在
         return list.id === item.id && untils.sameArray(list.norm, norm)
-      }else{
+      } else {
         return list.id === item.id
       }
     })
@@ -1058,14 +1106,15 @@ Page({
     if (index !== -1) {
       setData["carList[" + index + "].num"] = carList[index].num + 1;
       setData["categoryDetail[" + curIndex + "].num"] = curItem.num + 1;
-    }else{
+    } else {
       carList.unshift({
         id: curItem.id, //商品列表id
         curIndex: curIndex, //商品列表下标
         name: curItem.goodsName, //商品名称
         price: curItem.price, //商品价格
         num: 1, //商品数量,
-        norm: tmpNorm //商品规格
+        norm: tmpNorm, //商品规格
+        normText: tmpNorm.join("；")
       })
       setData["carList"] = carList;
       setData["categoryDetail[" + curIndex + "].num"] = curItem.num + 1;
@@ -1074,21 +1123,21 @@ Page({
     that.cartCount(setData, curIndex, "add");
   },
   //禁止删除
-  forbidDel(event){
+  forbidDel(event) {
     let that = this;
     let setData = {};
     if (that.data.forbidTip.show) return;
     setData["forbidTip.show"] = true;
     setData["forbidTip.offsetTop"] = event.target.offsetTop - 30;
     that.setData(setData);
-    setTimeout(()=>{
+    setTimeout(() => {
       setData["forbidTip.show"] = false;
       setData["forbidTip.offsetTop"] = 0;
       that.setData(setData);
-    },1500);
+    }, 1500);
   },
   // 选择套餐
-  navigatorHandle(event){
+  navigatorHandle(event) {
     let that = this;
     let curIndex = event.target.dataset.itemindex
     let curItem = that.data.categoryDetail[curIndex];
