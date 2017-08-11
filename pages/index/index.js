@@ -113,7 +113,7 @@ Page({
     categoryDetail: [
       {
         id: 1,
-        cid: 1,
+        cid: 1,//分类id
         goodsName: '法式鹅肝酿果d木牛小扒220g',
         // goodsImg: '/images/img1.jpg',
         goodsImg: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1501825683750&di=4f95ed3299d6b62fa90415410cf76cb7&imgtype=0&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fd4%2F1509%2Ff1%2F22710e549b52b.png',
@@ -235,25 +235,28 @@ Page({
           groupItem: [
             {
               checkName: "小吃",
-              checkNum: 1,
+              checkNum: [2,1],//2选1
+              open: true,//是否展开
               list: [
-                { itemName: "够粗的美式薯条 (原味、麻辣)", checked: false },
+                { itemName: "够粗的美式薯条 (原味、麻辣)", checked: true },
                 { itemName: "美味薯丸", checked: false }
               ]
             },
             {
               checkName: "烤肉",
-              checkNum: 2,
+              checkNum: [4, 2],//4选2
+              open: true,//是否展开
               list: [
-                { itemName: "招牌过木架烤三角肥牛2000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"] },], checked: false },
-                { itemName: "果木烤金蒜牛扒", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"] },], checked: false },
-                { itemName: "招牌过木架烤三角肥牛", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"] },], checked: false },
-                { itemName: "招牌过木架烤三角肥牛1000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"] },], checked: false }
+                { itemName: "招牌过木架烤三角肥牛2000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: true, checkNorm: ["3成熟"], normText: "3成熟"},
+                { itemName: "果木烤金蒜牛扒", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟" },
+                { itemName: "招牌过木架烤三角肥牛", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: true, checkNorm: ["3成熟"], normText: "3成熟" },
+                { itemName: "招牌过木架烤三角肥牛1000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟"}
               ]
             },
             {
               checkName: "酒水",
-              checkNum: 2,
+              checkNum: [3, 2],//3选2
+              open: false,//是否展开
               list: [
                 { itemName: "青岛啤酒", checked: false },
                 { itemName: "莫拉利白葡萄酒", checked: false },
@@ -262,10 +265,11 @@ Page({
             },
             {
               checkName: "奇葩表情",
-              checkNum: 2,
+              checkNum: [3, 2],//3选2
+              open: true,//是否展开
               list: [
-                { itemName: "哈哈哈", norm: [{ name: "类型", value: ["哈", "哈哈", "哈哈哈", "哈哈哈哈"] },], checked: false },
-                { itemName: "呵呵呵", checked: false },
+                { itemName: "哈哈哈", norm: [{ name: "类型", value: ["哈", "哈哈", "哈哈哈", "哈哈哈哈"], chkIndex: 0 },], checked: false, checkNorm: ["哈"], normText: "铁板" },
+                { itemName: "呵呵呵", checked: true },
                 { itemName: "嘎嘎嘎", checked: false }
               ]
             }
@@ -849,16 +853,23 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady() {
-    // 异步获取api  把数据存入storage
-
     let that = this;
     let categoryMenu = that.data.categoryMenu;
     let curCategory = categoryMenu[0];
     let setData = {};
+    let storeItem;//套餐信息
+    let index;
+    let tmpNorm;
     curCategory.index = 0;
+    // 设置当前分类
     setData["curCategory"] = curCategory;
+    //获取storage信息
+    storeItem = JSON.parse(wx.getStorageSync("curItem"));
+    console.log("-----------  index --------------")
+    console.log(storeItem);
+  
+    //设置data
     that.setData(setData);
-
   },
 
   /**
@@ -878,7 +889,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-
+    
   },
 
   /**

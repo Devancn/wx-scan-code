@@ -134,6 +134,7 @@
 .btn-right .iconfont{
   display: none;
   color: #dd2726;
+  font-size: 16px;
 }
 .btn-right .iconfont::after{
   content: '\e605'

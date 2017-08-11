@@ -159,15 +159,15 @@ scroll-view,view{
   color: #000;
 }
 
-.layer-button .btn[data-cancel] {
+.layer-button .btn.no {
   color: #999;
 }
 
-.layer-button .btn[data-confirm] {
+.layer-button .btn.yes {
   position: relative;
   color: #dd2726;
 }
-.layer-button .btn[data-confirm]::before{
+.layer-button .btn.yes::before{
   content: '';
   position: absolute;
   top: 0;

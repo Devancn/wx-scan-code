@@ -2,6 +2,8 @@
   "pages":[
     "pages/package/package",
     "pages/index/index"
+    
+      
   ],
   "window":{
     "backgroundTextStyle":"light",

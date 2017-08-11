@@ -91,8 +91,8 @@
   <view class="layer-page">
     <view class="layer-page-content">清空购物车</view>
     <view class="layer-button">
-      <view class="btn" data-cancel bindtap="cancelAction">取消</view>
-      <view class="btn" data-confirm bindtap="confirmAction">确定</view>
+      <view class="btn no" bindtap="cancelAction">取消</view>
+      <view class="btn yes" bindtap="confirmAction">确定</view>
     </view>
   </view>
 </view> 

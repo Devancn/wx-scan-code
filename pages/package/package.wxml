@@ -1,28 +1,25 @@
 <view class="package-page">
   <!--组合销售  --> 
-  <view wx:if="{{curItem.packageData.combination}}" class="group-item"  data-open="true">
-    <view class="group-title">
-      <text class="titile-left">
-        <text>午市豪华套餐 - 3选2</text> 
-      </text>
-      <view class="titile-right">重选</view>
-    </view>
-    <view class="group-content">
-      <view class="content-list" data-check="true">
-        <text class="content-left">农夫山泉</text>
-        <view class="btn-right">
-          <view class="iconfont"></view>
-        </view>
+  <view wx:if="{{curItem.packageData.combination}}">
+    <view class="group-item" wx:for="{{curItem.packageData.groupItem}}" wx:key="index" data-open="{{item.open}}" wx:for-index="index1">
+      <view class="group-title" bindtap="controlOPen" data-index="{{index1}}">
+        <text class="titile-left">
+          <text>{{item.checkName}} - {{item.checkNum[0]}} 选 {{item.checkNum[1]}}</text> 
+        </text>
+        <view class="titile-right" catchtap="resetSelct"  data-index="{{index1}}">重选</view>
       </view>
-      <view class="content-list" data-check="true">
-        <view class="content-left">
-          <text>农夫山泉</text>
-          <view class="remarks">
-            <text>中份；中杯</text>
+      <view class="group-content">
+        <view class="content-list" wx:for="{{item.list}}" wx:key="index" data-check="{{item.checked}}" data-groupindex="{{index1}}" data-listindex="{{index}}" catchtap="checkItem">
+          <view class="content-left">
+            <text>{{item.itemName}}</text>
+             <view class="remarks" wx:if="{{item.checked && item.norm.length}}">{{item.normText}}</view>
           </view>
-        </view>
-        <view class="btn-right">
-          <view class="btn-base" bindtap="openStyle">规格</view>
+          <view class="btn-right" wx:if="{{item.norm}}"  data-groupindex="{{index1}}" data-listindex="{{index}}" catchtap="openStyle">
+            <view class="btn-base">规格</view>
+          </view>
+          <view class="btn-right" wx:else>
+            <view class="iconfont"></view>
+          </view>
         </view>
       </view>
     </view>
@@ -35,7 +32,7 @@
     </view>
     <view class="group-content">
       <block wx:for="{{curItem.packageData.list}}" wx:key="index">
-        <view class="content-list" data-check="true" bindtap="{{item.norm ? 'openStyle' : ''}}" data-index="{{index}}">
+        <view class="content-list" data-check="true" catchtap="{{item.norm ? 'openStyle' : ''}}" data-index="{{index}}">
           <view class="content-left">
             <text>{{item.itemName}}</text>
             <view class="remarks" wx:if="{{item.normText}}">
@@ -52,6 +49,7 @@
       </block>  
     </view>
   </view>
+
   <!--规格弹窗  -->
   <view class="layer-area layer-goods-style" wx:if="{{layer.norm.show}}">
     <view class="layer-shade"></view>
@@ -77,6 +75,17 @@
     </view>
   </view>
 
+  <!--商品选满提示  -->
+  <view class="layer-area layer-confirm" wx:if="{{layer.know}}">
+    <view class="layer-shade"></view>
+    <view class="layer-page">
+      <view class="layer-page-content">改组商品已选满</view>
+      <view class="layer-button">
+        <view class="btn yes" bindtap="knowHandle">知道了</view>
+      </view>
+    </view>
+  </view> 
+
   <!--页面底部按钮  -->
-  <view class="footer-btn-ok">选好了</view>
+  <view class="footer-btn-ok" bindtap="packageOk">选好了</view>
 </view>
