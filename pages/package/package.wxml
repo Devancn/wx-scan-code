@@ -76,10 +76,10 @@
   </view>
 
   <!--商品选满提示  -->
-  <view class="layer-area layer-confirm" wx:if="{{layer.know}}">
+  <view class="layer-area layer-confirm" wx:if="{{layer.know.show}}">
     <view class="layer-shade"></view>
     <view class="layer-page">
-      <view class="layer-page-content">改组商品已选满</view>
+      <view class="layer-page-content">{{layer.know.text}}</view>
       <view class="layer-button">
         <view class="btn yes" bindtap="knowHandle">知道了</view>
       </view>

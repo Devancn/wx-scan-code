@@ -20,7 +20,10 @@ Page({
           "curIndex": 1
         }
       },
-      know: false
+      know: {
+        show: false,
+        text: ""
+      }
     },
     // 商品信息
     curItem: {},
@@ -44,8 +47,7 @@ Page({
     let setData = {};
     setData["curItem"] = storeItem;
     that.setData(setData);
-    console.log("-----------  package --------------")
-    console.log(wx.getStorageSync("curItem"));
+    console.log(storeItem);
   },
 
   /**
@@ -112,7 +114,8 @@ Page({
       });
       //判断当前选中的项是否已经超过了应选项并且当前项是选中状态
       if (filter.length >= chkNum[1] && !checked) {
-        layer.know = true;
+        layer.know.text ="该组商品已选满";
+        layer.know.show = true;
         setData["layer"] = layer;
         that.setData(setData);
         return;
@@ -137,6 +140,9 @@ Page({
     setData["layer"] = layer;
     that.setData(setData);
   },
+  groupNorm(){
+
+  },
   // 购物车规格事件
   tapItem(event) {
     let index = event.target.dataset.index;
@@ -159,9 +165,9 @@ Page({
     norm.data.style.forEach((item, index) => {
       tmpNorm.push(item.value[item.chkIndex]);
     })
-  
     //组合套餐
     if (curItem.packageData.combination) {
+      curItem.packageData.groupItem[groupIndex].list[listIndex].checked = true;
       curItem.packageData.groupItem[groupIndex].list[listIndex].checkNorm = tmpNorm;
       curItem.packageData.groupItem[groupIndex].list[listIndex].normText = tmpNorm.join("；");
     }else{
@@ -183,8 +189,57 @@ Page({
   packageOk() {
     let that = this;
     let curItem = that.data.curItem;
+    let setData = {};
+    let chkNum = 0;
+    let groupItem;
+    let itemLength = 0;
+    let list;
+    let isChecked = false;//所有商品是否都全部选择了
+    let checkFlag = false;//有选择商品但没有全部选择
+    let checkItem = [];
+    let checkNum = 0;
+    let filterItem = [];
+    let checkCount = 0;
+    let layer = that.data.layer;
+    // 是否是组合套餐
+    if (curItem.packageData.combination) {
+      groupItem = curItem.packageData.groupItem;
+      itemLength = groupItem.length;
+      for (let i = 0; i < itemLength; i++) {
+        list = groupItem[i].list;
+        checkNum = groupItem[i].checkNum[1];
+        filterItem = list.filter((item) => {
+          return item.checked;
+        });
+        if (filterItem.length !== 0) {
+          if (filterItem.length === checkNum) {
+            checkCount++;
+            checkFlag = true;
+          }else {
+            isChecked = false;
+            checkFlag = true;
+          }
+        }else {
+          isChecked = false;
+        }
+      }
+      if (checkCount != itemLength) {
+        if (checkFlag) {
+          layer.know.text = "还没有选够哟~";
+          layer.know.show = true;
+          setData["layer"] = layer;
+        }else {
+          layer.know.text = "您还没有选择商品";
+          layer.know.show = true;
+          setData["layer"] = layer;
+        }
+        that.setData(setData);
+        return;
+      }
+    }
+    curItem.num += 1;
     // 把当前选择的套餐保存在本地
-    // console.log(curItem);
+    setData["curItem"] = curItem;
     wx.setStorageSync("curItem", JSON.stringify(curItem));
     wx.navigateTo({
       url: '/pages/index/index',
@@ -226,17 +281,33 @@ Page({
     let setData = {};
     let chkNum = curItem.packageData.groupItem[groupIndex].checkNum;
     let checked = curItem.packageData.groupItem[groupIndex].list[listIndex].checked;
+    let layerNorm;
     //过滤掉没有相中的项
     let filter = curItem.packageData.groupItem[groupIndex].list.filter((item)=>{
       return item.checked;
     });
-    //判断当前选中的项是否已经超过了应选项并且当前项是选中状态
+    //选中的项大于规定项
     if (filter.length >= chkNum[1] && !checked) {
-      layer.know = true;
+      layer.know.text = "该组商品已选满";
+      layer.know.show = true;
       setData["layer"] = layer;
-    }else{
-      curItem.packageData.groupItem[groupIndex].list[listIndex].checked = !checked;
-      setData["curItem"] = curItem;
+    }else {
+      // 是否为规格商品
+      if (curItem.packageData.groupItem[groupIndex].list[listIndex].norm && !checked) {
+        // 规格弹窗
+        layerNorm = {
+          name: curItem.packageData.groupItem[groupIndex].list[listIndex].itemName,
+          style: curItem.packageData.groupItem[groupIndex].list[listIndex].norm,
+          groupIndex: groupIndex,
+          listIndex: listIndex
+        }
+        layer.norm.data = layerNorm;
+        layer.norm.show = true;
+        setData["layer"] = layer;
+      } else {
+        curItem.packageData.groupItem[groupIndex].list[listIndex].checked = !checked;
+        setData["curItem"] = curItem;
+      }
     }
     that.setData(setData);
   },
@@ -245,7 +316,8 @@ Page({
     let that = this;
     let layer = that.data.layer;
     let setData = {};
-    layer.know = false;
+    layer.know.text = "";
+    layer.know.show = false;
     setData["layer"] = layer;
     that.setData(setData);
   }

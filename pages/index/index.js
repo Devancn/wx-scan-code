@@ -238,7 +238,7 @@ Page({
               checkNum: [2,1],//2选1
               open: true,//是否展开
               list: [
-                { itemName: "够粗的美式薯条 (原味、麻辣)", checked: true },
+                { itemName: "够粗的美式薯条 (原味、麻辣)", checked: false },
                 { itemName: "美味薯丸", checked: false }
               ]
             },
@@ -247,16 +247,16 @@ Page({
               checkNum: [4, 2],//4选2
               open: true,//是否展开
               list: [
-                { itemName: "招牌过木架烤三角肥牛2000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: true, checkNorm: ["3成熟"], normText: "3成熟"},
+                { itemName: "招牌过木架烤三角肥牛2000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟"},
                 { itemName: "果木烤金蒜牛扒", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟" },
-                { itemName: "招牌过木架烤三角肥牛", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: true, checkNorm: ["3成熟"], normText: "3成熟" },
+                { itemName: "招牌过木架烤三角肥牛", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟" },
                 { itemName: "招牌过木架烤三角肥牛1000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟"}
               ]
             },
             {
               checkName: "酒水",
               checkNum: [3, 2],//3选2
-              open: false,//是否展开
+              open: true,//是否展开
               list: [
                 { itemName: "青岛啤酒", checked: false },
                 { itemName: "莫拉利白葡萄酒", checked: false },
@@ -269,7 +269,7 @@ Page({
               open: true,//是否展开
               list: [
                 { itemName: "哈哈哈", norm: [{ name: "类型", value: ["哈", "哈哈", "哈哈哈", "哈哈哈哈"], chkIndex: 0 },], checked: false, checkNorm: ["哈"], normText: "铁板" },
-                { itemName: "呵呵呵", checked: true },
+                { itemName: "呵呵呵", checked: false },
                 { itemName: "嘎嘎嘎", checked: false }
               ]
             }
@@ -856,18 +856,47 @@ Page({
     let that = this;
     let categoryMenu = that.data.categoryMenu;
     let curCategory = categoryMenu[0];
+    let categoryDetail = that.data.categoryDetail;
     let setData = {};
-    let storeItem;//套餐信息
-    let index;
-    let tmpNorm;
+    let curItem;
+    let carList;
+    let curIndex;
     curCategory.index = 0;
     // 设置当前分类
     setData["curCategory"] = curCategory;
     //获取storage信息
-    storeItem = JSON.parse(wx.getStorageSync("curItem"));
-    console.log("-----------  index --------------")
-    console.log(storeItem);
-  
+    curItem = wx.getStorageSync("curItem");
+    if (curItem){
+      curItem = JSON.parse(wx.getStorageSync("curItem"));
+      carList = JSON.parse(wx.getStorageSync("carList"));
+      curIndex = categoryDetail.findIndex((item) => {
+        return item.id === curItem.id;
+      });
+      if (carList.length === 0) {
+        carList.unshift({
+          id: curItem.id, //商品列表id
+          curIndex: curIndex, //商品列表下标
+          name: curItem.goodsName, //商品名称
+          price: curItem.price, //商品价格
+          num: curItem.num, //商品数量
+        })
+      }else {
+        // 判断当前商品是否存在购物车
+        
+        carList.map((item)=>{
+          if (item.id === curItem.id) {
+            curItem.num = curItem.num;
+          }
+        })
+      }
+      categoryDetail[curIndex].num = curItem.num;
+      setData["carList"] = carList
+      setData["categoryDetail"] = categoryDetail
+      that.cartCount(setData, curIndex, "add");
+      wx.removeStorageSync("curItem");
+      wx.removeStorageSync("carList");
+      return;
+    }
     //设置data
     that.setData(setData);
   },
@@ -1152,8 +1181,10 @@ Page({
     let that = this;
     let curIndex = event.target.dataset.itemindex
     let curItem = that.data.categoryDetail[curIndex];
+    let carList = that.data.carList;
     // 把当前选择的套餐保存在本地
     wx.setStorageSync("curItem", JSON.stringify(curItem));
+    wx.setStorageSync("carList", JSON.stringify(carList));
     wx.navigateTo({
       url: '/pages/package/package'
     })
