@@ -4,12 +4,16 @@ page {
   -webkit-text-size-adjust: 100%;
   height: 100%;
   background: #f8f8f8;
+  color:#333;
 }
 scroll-view,view{
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-
+/*灰色  */
+.gray{
+  color:#888;
+}
 /*高亮颜色  */
 .highlighted {
   color: #dd2726;

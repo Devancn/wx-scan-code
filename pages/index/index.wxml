@@ -51,7 +51,7 @@
     <view class="iconfont"></view>  
     <text class="num">{{cartStatistisc.amount}}</text>
   </view>
-  <text class="btn-base btn-view">查看订单</text>
+  <text class="btn-base btn-view" bindtap="viewOrder">{{footerInfo.text}}</text>
 </view>
   
 <!--购物车  -->

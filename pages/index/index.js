@@ -15,6 +15,11 @@ Page({
       num: 0,
       translate: ''
     },
+    // 底部信息
+    footerInfo:{
+      state: 0,//0：查看订单，1：选好了
+      text: "查看订单"
+    },
     // 多规格删除提示
     forbidTip: {
       show: false,
@@ -997,10 +1002,14 @@ Page({
     var that = this;
     let categoryDetail = that.data.categoryDetail;
     let cartStatistisc = that.data.cartStatistisc;
+    let footerInfo = that.data.footerInfo;
     let setData = {};
     cartStatistisc.amount = 0;
     cartStatistisc.price = '0.00';
     setData["carList"] = [];//清空购物车
+    footerInfo.state = 0;
+    footerInfo.text = "查看订单";
+    setData["footerInfo"] = footerInfo;
     setData["layer.confirm"] = false;//关闭清空购物车弹窗
     setData["layer.actionSheet"] = false;//关闭购物车弹窗
     setData["categoryDetail"] = categoryDetail;//商品列表数量复原
@@ -1107,6 +1116,7 @@ Page({
     let carList = that.data.carList;
     let cartStatistisc = that.data.cartStatistisc;
     let curItem = that.data.categoryDetail[curIndex];
+    let footerInfo = that.data.footerInfo;
     //把总价转为数字型
     let tmpNum = cartStatistisc.amount
     let tmpPrice = Number(cartStatistisc.price);
@@ -1123,6 +1133,14 @@ Page({
     cartStatistisc.price = tmpPrice;
     cartStatistisc.amount = tmpNum;
     setData["cartStatistisc"] = cartStatistisc;
+    if (cartStatistisc.amount > 0) {
+      footerInfo.state = 1;
+      footerInfo.text = "选好了";
+    }else{
+      footerInfo.state = 0;
+      footerInfo.text = "查看订单";
+    }
+    setData["footerInfo"] = footerInfo;
     that.setData(setData);
   },
   // 关闭规格弹窗
@@ -1211,5 +1229,11 @@ Page({
     wx.navigateTo({
       url: '/pages/package/package'
     });
+  },
+  // 查看订单
+  viewOrder(){
+    wx.navigateTo({
+      url: '/pages/order/order',
+    })
   }
 })
