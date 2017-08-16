@@ -47,7 +47,6 @@ Page({
     let setData = {};
     setData["curItem"] = storeItem;
     that.setData(setData);
-    console.log(storeItem);
   },
 
   /**
@@ -241,9 +240,7 @@ Page({
     // 把当前选择的套餐保存在本地
     setData["curItem"] = curItem;
     wx.setStorageSync("curItem", JSON.stringify(curItem));
-    wx.navigateTo({
-      url: '/pages/index/index',
-    })
+    wx.navigateBack()
   },
   //控制展开收缩分组
   controlOPen(event) {

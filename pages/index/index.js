@@ -853,6 +853,13 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady() {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow() {
     let that = this;
     let categoryMenu = that.data.categoryMenu;
     let curCategory = categoryMenu[0];
@@ -861,51 +868,66 @@ Page({
     let curItem;
     let carList;
     let curIndex;
+    let findItem;
+    let curItemStr;
+    let findItemStr;
     curCategory.index = 0;
     // 设置当前分类
     setData["curCategory"] = curCategory;
     //获取storage信息
     curItem = wx.getStorageSync("curItem");
-    if (curItem){
+    if (curItem) {
+      console.log(curItem);
       curItem = JSON.parse(wx.getStorageSync("curItem"));
       carList = JSON.parse(wx.getStorageSync("carList"));
       curIndex = categoryDetail.findIndex((item) => {
         return item.id === curItem.id;
       });
-      if (carList.length === 0) {
+      // 判断当前商品是否存在购物车
+      findItem = carList.find((item) => {
+        return item.id === curItem.id;
+      });
+      if (findItem) {
+        // 是否组合套餐
+        if (curItem.packageData.combination) {
+          curItemStr = JSON.stringify(curItem.packageData.groupItem);
+          findItemStr = JSON.stringify(findItem.packageData.groupItem);
+          if (curItemStr === findItemStr) {
+            carList.map((item)=>{
+              if (item.id === curItem.id) {
+                item.num += 1;
+              }
+            });
+          } else {
+            carList.unshift({
+              id: curItem.id, //商品列表id
+              curIndex: curIndex, //商品列表下标
+              name: curItem.goodsName, //商品名称
+              price: curItem.price, //商品价格
+              num: 1, //商品数量
+              packageData: curItem.packageData
+            })
+          }
+        }
+      } else {
         carList.unshift({
           id: curItem.id, //商品列表id
           curIndex: curIndex, //商品列表下标
           name: curItem.goodsName, //商品名称
           price: curItem.price, //商品价格
-          num: curItem.num, //商品数量
-        })
-      }else {
-        // 判断当前商品是否存在购物车
-        
-        carList.map((item)=>{
-          if (item.id === curItem.id) {
-            curItem.num = curItem.num;
-          }
+          num: 1, //商品数量
+          packageData: curItem.packageData
         })
       }
-      categoryDetail[curIndex].num = curItem.num;
+      categoryDetail[curIndex].num += 1;
       setData["carList"] = carList
       setData["categoryDetail"] = categoryDetail
       that.cartCount(setData, curIndex, "add");
       wx.removeStorageSync("curItem");
       wx.removeStorageSync("carList");
-      return;
     }
     //设置data
     that.setData(setData);
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
   },
   /**
    * 生命周期函数--监听页面隐藏
@@ -1179,6 +1201,7 @@ Page({
   // 选择套餐
   navigatorHandle(event) {
     let that = this;
+ 
     let curIndex = event.target.dataset.itemindex
     let curItem = that.data.categoryDetail[curIndex];
     let carList = that.data.carList;
@@ -1187,6 +1210,6 @@ Page({
     wx.setStorageSync("carList", JSON.stringify(carList));
     wx.navigateTo({
       url: '/pages/package/package'
-    })
+    });
   }
 })
