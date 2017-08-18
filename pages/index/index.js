@@ -118,10 +118,11 @@ Page({
         // goodsImg: '/images/img1.jpg',
         goodsImg: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1501825683750&di=4f95ed3299d6b62fa90415410cf76cb7&imgtype=0&src=http%3A%2F%2Fimg1.qunarzz.com%2Ftravel%2Fd4%2F1509%2Ff1%2F22710e549b52b.png',
         goodsDesc: '精心挑选肉质厚实的本地鸡，味道.很赞特别推荐！鸡肉味道很赞，味道很赞特别推荐！',
-        remarks: '',
+        remarks: '不要辣不要辣不要辣',
         isGood: true,
         spicy: 2,
         price: "121.00",
+        avatar: 'https://wx.qlogo.cn/mmopen/Q3auHgzwzM7eQhicv7SbAE5oxGd4XQVPzmgU5R0SWOTiavIUBynUuiacWJooAy41bRyhk7LrMPLyn5HppywDXyNwoATT88FL7ejtJZ5KaolQps/0',
         num: 0
       },
       {
@@ -130,10 +131,11 @@ Page({
         goodsName: '刷卡机老师第六课老师',
         goodsImg: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1501825683750&di=f7881907335b2ad535a7da8dadfbfb19&imgtype=0&src=http%3A%2F%2Fpic5.photophoto.cn%2F20071221%2F0042040377755194_b.jpg',
         goodsDesc: '胜多负少是就分类看手机离开是解放路口谁离开房间是了肯德基离开家上课了 ',
-        remarks: '',
+        remarks: '不要麻不要麻不要麻不要麻',
         isGood: true,
         spicy: 0,
         price: "120.00",
+        avatar: 'https://wx.qlogo.cn/mmopen/Q3auHgzwzM7eQhicv7SbAE5oxGd4XQVPzmgU5R0SWOTiavIUBynUuiacWJooAy41bRyhk7LrMPLyn5HppywDXyNwoATT88FL7ejtJZ5KaolQps/0',
         num: 0,
         norm: [
           {
@@ -167,13 +169,14 @@ Page({
         isGood: false,
         spicy: 3,
         price: "106.00",
+        avatar: 'https://wx.qlogo.cn/mmopen/Q3auHgzwzM7eQhicv7SbAE5oxGd4XQVPzmgU5R0SWOTiavIUBynUuiacWJooAy41bRyhk7LrMPLyn5HppywDXyNwoATT88FL7ejtJZ5KaolQps/0',
         num: 0,
         packageData: {
           combination: false,
           packageName: "整单销售",
           list: [
-            { itemName: "盐烤原味新西兰青口贝", remarks: '' },
-            { itemName: "照烧黄共鱼", remarks: '', norm: [{ name: "铁板做法", value: ["铁板", "盐烧"], chkIndex: 0 }, { name: "温度", value: ["常温", "冰镇", "加热"],  chkIndex: 0}], checkNorm: ["铁板", "常温"], normText:"铁板；常温"}
+            { itemName: "盐烤原味新西兰青口贝", remarks: '微辣微辣微辣' },
+            { itemName: "照烧黄共鱼", remarks: '淡一点淡一点', norm: [{ name: "铁板做法", value: ["铁板", "盐烧"], chkIndex: 0 }, { name: "温度", value: ["常温", "冰镇", "加热"],  chkIndex: 0}], checkNorm: ["铁板", "常温"], normText:"铁板；常温"}
           ]
         }
       },
@@ -183,10 +186,11 @@ Page({
         goodsName: '法式鹅肝酿果木牛小扒220g',
         goodsImg: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1501825683749&di=c2709dd76dc5c1211d554d86c5f56ff0&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3D3c2d751122381f308a1485eac168267d%2Fe824b899a9014c08cc046f8c007b02087bf4f4d8.jpg',
         goodsDesc: '精心挑选肉质厚实的本地鸡，味道.很赞特别推荐！鸡肉味道很赞，味道很赞特别推荐！',
-        remarks: '',
+        remarks: '这是备注信息',
         isGood: true,
         spicy: 2,
         price: "121.00",
+        avatar: 'https://wx.qlogo.cn/mmopen/Q3auHgzwzM7eQhicv7SbAE5oxGd4XQVPzmgU5R0SWOTiavIUBynUuiacWJooAy41bRyhk7LrMPLyn5HppywDXyNwoATT88FL7ejtJZ5KaolQps/0',
         num: 0
       },
       {
@@ -195,7 +199,7 @@ Page({
         goodsName: '刷卡机老师第六课老师',
         goodsImg: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1501825683749&di=f9c0574a6f3db4af5ffa044906c42806&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3D850313fbfa1f3a294ec5dd8df14cd644%2F2cf5e0fe9925bc315537b3bd54df8db1cb1370a8.jpg',
         goodsDesc: '胜多负少是就分类看手机离开是解放路口谁离开房间是了肯德基离开家上课了 ',
-        remarks: '',
+        remarks: '这是备注信息',
         isGood: true,
         spicy: 0,
         price: "120.00",
@@ -232,6 +236,7 @@ Page({
         isGood: false,
         spicy: 3,
         price: "106.00",
+        avatar: 'https://wx.qlogo.cn/mmopen/Q3auHgzwzM7eQhicv7SbAE5oxGd4XQVPzmgU5R0SWOTiavIUBynUuiacWJooAy41bRyhk7LrMPLyn5HppywDXyNwoATT88FL7ejtJZ5KaolQps/0',
         num: 0,
         packageData: {
           combination: true,
@@ -242,8 +247,8 @@ Page({
               checkNum: [2,1],//2选1
               open: true,//是否展开
               list: [
-                { itemName: "够粗的美式薯条 (原味、麻辣)", checked: false, remarks: '' },
-                { itemName: "美味薯丸", checked: false, remarks: '' }
+                { itemName: "够粗的美式薯条 (原味、麻辣)", checked: false, remarks: '这是备注信息' },
+                { itemName: "美味薯丸", checked: false, remarks: '这是备注信息' }
               ]
             },
             {
@@ -251,10 +256,10 @@ Page({
               checkNum: [4, 2],//4选2
               open: true,//是否展开
               list: [
-                { itemName: "招牌过木架烤三角肥牛2000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: ''},
-                { itemName: "果木烤金蒜牛扒", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: ''},
-                { itemName: "招牌过木架烤三角肥牛", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: '' },
-                { itemName: "招牌过木架烤三角肥牛1000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: ''}
+                { itemName: "招牌过木架烤三角肥牛2000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: '这是备注信息'},
+                { itemName: "果木烤金蒜牛扒", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: '这是备注信息'},
+                { itemName: "招牌过木架烤三角肥牛", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: '这是备注信息' },
+                { itemName: "招牌过木架烤三角肥牛1000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: '这是备注信息'}
               ]
             },
             {
@@ -289,6 +294,7 @@ Page({
         isGood: true,
         spicy: 2,
         price: "121.00",
+        avatar: 'https://wx.qlogo.cn/mmopen/Q3auHgzwzM7eQhicv7SbAE5oxGd4XQVPzmgU5R0SWOTiavIUBynUuiacWJooAy41bRyhk7LrMPLyn5HppywDXyNwoATT88FL7ejtJZ5KaolQps/0',
         num: 0
       },
       {
@@ -300,6 +306,7 @@ Page({
         isGood: true,
         spicy: 0,
         price: "120.00",
+        avatar: 'https://wx.qlogo.cn/mmopen/Q3auHgzwzM7eQhicv7SbAE5oxGd4XQVPzmgU5R0SWOTiavIUBynUuiacWJooAy41bRyhk7LrMPLyn5HppywDXyNwoATT88FL7ejtJZ5KaolQps/0',
         num: 0,
         norm: [
           {
@@ -906,6 +913,7 @@ Page({
           id: curItem.id, //商品列表id
           curIndex: curIndex, //商品列表下标
           goodsImg: curItem.goodsImg,//商品图片
+          avatar: curItem.avatar,
           name: curItem.goodsName, //商品名称
           price: curItem.price, //商品价格
           num: 1, //商品数量
@@ -1055,6 +1063,8 @@ Page({
             id: curItem.id, //商品列表id
             curIndex: curIndex, //商品列表下标
             goodsImg: curItem.goodsImg,//商品图片
+            remarks: curItem.remarks,
+            avatar: curItem.avatar,
             name: curItem.goodsName, //商品名称
             price: curItem.price, //商品价格
             num: curItem.num + 1, //商品数量
@@ -1178,6 +1188,8 @@ Page({
         id: curItem.id, //商品列表id
         curIndex: curIndex, //商品列表下标
         goodsImg: curItem.goodsImg,//商品图片
+        remarks: curItem.remarks,
+        avatar: curItem.avatar,
         name: curItem.goodsName, //商品名称
         price: curItem.price, //商品价格
         num: 1, //商品数量,
@@ -1213,7 +1225,6 @@ Page({
     let carList = that.data.carList;
     // 把当前选择的套餐保存在本地
     wx.setStorageSync("curItem", JSON.stringify(curItem));
-    wx.setStorageSync("carList", JSON.stringify(carList));
     wx.navigateTo({
       url: '/pages/package/package'
     });
