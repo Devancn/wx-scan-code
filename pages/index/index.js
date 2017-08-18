@@ -8,13 +8,6 @@ Page({
   data: {
     // 滚动到某个位置
     toView: "",
-    // 当前分类
-    curCategory: {
-      index: 0,
-      name: '',
-      num: 0,
-      translate: ''
-    },
     // 底部信息
     footerInfo:{
       state: 0,//0：查看订单，1：选好了
@@ -39,6 +32,8 @@ Page({
       amount: 0,
       price: "0.00"
     },
+    // 当前分类index
+    defaltIndex: 0,
     // 分类菜单
     categoryMenu: [
       {
@@ -871,7 +866,6 @@ Page({
   onShow() {
     let that = this;
     let categoryMenu = that.data.categoryMenu;
-    let curCategory = categoryMenu[0];
     let categoryDetail = that.data.categoryDetail;
     let carList = that.data.carList;
     let setData = {};
@@ -880,9 +874,6 @@ Page({
     let findItem;
     let curItemStr;
     let findItemStr;
-    curCategory.index = 0;
-    // 设置当前分类
-    setData["curCategory"] = curCategory;
     //获取storage信息
     curItem = wx.getStorageSync("curItem") ? JSON.parse(wx.getStorageSync("curItem")) : null;
     if (curItem) {
@@ -972,8 +963,7 @@ Page({
     let index = event.currentTarget.dataset.index
     let categoryMenu = that.data.categoryMenu;
     setData["toView"] = view;
-    setData["curCategory"] = categoryMenu[index];
-    setData["curCategory.index"] = index;
+    setData["defaltIndex"] = index;
     that.setData(setData);
   },
   showCar() {

@@ -1,6 +1,6 @@
 <!--分类菜单  -->
 <scroll-view class="category-menu" scroll-y="true" scroll-with-animation="true">
-  <view wx:for="{{categoryMenu}}" wx:key="index" class="item {{index === curCategory.index ? 'active': ''}}" data-view="cateTop" data-index="{{index}}"  bindtap="switchTab">
+  <view wx:for="{{categoryMenu}}" wx:key="index" class="item {{index === defaltIndex ? 'active': ''}}" data-view="cateTop" data-index="{{index}}"  bindtap="switchTab">
     <text wx:if="{{item.name}}">{{item.name}}</text>
     <text wx:if="{{item.translate}}" class="translate">{{item.translate}}</text>
   </view>
@@ -9,9 +9,9 @@
 <!-- 分类详情 -->
 <scroll-view class="category-detail" scroll-y="true" scroll-with-animation="true" scroll-into-view="{{toView}}">
   <view class="class-item" id="cateTop">
-      <text class="class-title">{{curCategory.name}} - {{curCategory.translate}} ({{curCategory.num}})</text>
+      <text class="class-title">{{categoryMenu[defaltIndex].name}} - {{categoryMenu[defaltIndex].translate}} ({{categoryMenu[defaltIndex].num}})</text>
       <block wx:for="{{categoryDetail}}" wx:key="index">
-        <view class="goods" wx:if="{{curCategory.id === item.cid}}"> 
+        <view class="goods" wx:if="{{categoryMenu[defaltIndex].id === item.cid}}"> 
           <view class="goods-img-area"> 
             <image src="{{item.goodsImg}}"></image>
             <text class="img-desc">{{item.goodsDesc}}</text>
