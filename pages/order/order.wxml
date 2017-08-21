@@ -60,7 +60,7 @@
                       </view>
                       <view class="remarks-txt" wx:if="{{item.remarks !== ''}}">备注：{{item.remarks}}</view>
                     </view>
-                    <view class="btn-remark" bindtap="remarkAction" data-open="{{true}}" data-markinfo="{{[2,[pItem.id,i,j]]}}">
+                    <view class="btn-remark" bindtap="remarkAction" data-open="{{true}}" data-markinfo="{{[1,[pItem.id,i,j]]}}">
                       <text class="btn">备注</text>
                     </view>
                   </view>
@@ -100,7 +100,7 @@
         <view class="godds-info">
           <view class="head">
             <view class="name">{{item.name}}</view>
-            <view class="btn-remark" bindtap="remarkAction" data-open="{{true}}" data-markinfo="{{[0,[pItem.id]]}}">
+            <view class="btn-remark" bindtap="remarkAction" data-open="{{true}}" data-markinfo="{{[0,[item.id]]}}">
               <text class="btn">备注</text>
             </view>
           </view>
@@ -131,11 +131,11 @@
   <view class="footer">
     <block wx:if="{{(packages.length || foods.length) && orderState === 0}}">
       <view class="btn btn-base other" bindtap="navigateIndex">点菜</view>
-      <view class="btn btn-base">下单</view>
+      <view class="btn btn-base" bindtap="submitOrder">下单</view>
     </block>
     <block wx:elif="{{(packages.length || foods.length) && orderState === 1}}">
       <view class="btn btn-base other" bindtap="navigateIndex">加菜</view>
-      <view class="btn btn-base">下单</view>
+      <view class="btn btn-base" bindtap="submitOrder">下单</view>
     </block>
     <block wx:else>
       <view class="btn btn-base" bindtap="navigateIndex">点菜</view>
@@ -182,7 +182,7 @@
       <view class="layer-title">备注</view>
     </view>
     <view class="layer-page-content">
-      <textarea placeholder="请输入口味、偏好等" auto-focus="true" focus="true" fixed/>
+      <textarea placeholder="请输入口味、偏好等" value="{{tmpMarkTxt}}" auto-focus="true" focus="true" fixed bindinput="remarkInpput"/>
     </view>
     <view class="layer-button">
       <view class="btn no" bindtap="remarkAction" data-open="{{false}}">取消</view>
