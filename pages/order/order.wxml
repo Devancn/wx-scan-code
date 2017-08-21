@@ -105,11 +105,11 @@
             </view>
           </view>
           <view class="control-price">
-            <view class="price">¥{{item.price}}</view>
+            <view class="price">¥{{item.total}}</view>
             <view class="count-module">
-              <view class="iconfont icon-red"></view>
+              <view class="iconfont icon-red" bindtap="goodsHandle" data-goodsinfo="{{[0,'red',item.id]}}"></view>
               <view class="num">{{item.num}}</view>
-              <view class="iconfont icon-add"></view>
+              <view class="iconfont icon-add" bindtap="goodsHandle" data-goodsinfo="{{[0,'add',item.id]}}"></view>
             </view>
           </view>
           <view class="remarks-box " wx:if="{{item.normText && item.normText !== '' || item.remarks !== ''}}">
@@ -162,14 +162,14 @@
   </view>
 </view>
 
-<!--删除提示  -->
-<view class="layer-area layer-confirm" wx:if="{{layer.delTips.show}}">
+<!--删除商品提示  -->
+<view class="layer-area layer-confirm" wx:if="{{layer.removeGood.show}}">
   <view class="layer-shade"></view>
   <view class="layer-page">
-    <view class="layer-page-content">确认删除农夫山泉</view>
+    <view class="layer-page-content">{{layer.removeGood.text}}</view>
     <view class="layer-button">
-      <view class="btn no" bindtap="cancelAction">取消</view>
-      <view class="btn yes" bindtap="confirmAction">确定</view>
+      <view class="btn no" bindtap="cancelRemove">取消</view>
+      <view class="btn yes" bindtap="confirmRemove">确定</view>
     </view>
   </view>
 </view>

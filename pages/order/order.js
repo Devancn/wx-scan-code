@@ -13,8 +13,9 @@ Page({
         current: 0,
         num: 0,
       },
-      delTips: {
-        show: false
+      removeGood:{
+        show: false,
+        text: ""
       },
       remarks: {
         show: false
@@ -26,6 +27,7 @@ Page({
         text: "点餐小票已传到厨房，请耐心等待~",
         btn: ["确定"]
       },
+      carList: [],
       tmpMarkTxt: ""
     },
     orderDdata: {
@@ -34,6 +36,7 @@ Page({
       totalPrice: 0,
       tableNum: "A2",
     },
+    curId:0,//当前操作的商品id
     packages: [],
     foods: [],
     orderState: 0,//0:未下单; 1未买单:
@@ -63,12 +66,14 @@ Page({
     let carList = wx.getStorageSync("carList") ? JSON.parse(wx.getStorageSync("carList")) : [];
     let setData = {};
     for (let i = 0; i < carList.length; i++) {
+      carList[i].total = carList[i].price;
       if (carList[i].packageData) {
         packages.push(carList[i]);
       } else {
         foods.push(carList[i]);
       }
     }
+    setData["carList"] = carList;
     setData["packages"] = packages;
     setData["foods"] = foods;
     console.log(setData);
@@ -113,7 +118,7 @@ Page({
   // 选择用餐人数Action
   diningAction(event) {
     let that = this;
-    let data = event.currentTarget.dataset;
+    let data =  event ? event.currentTarget.dataset : {open: true};
     let layer = that.data.layer;
     let setData = {};
     if (layer.diningData.total.length === 0) {
@@ -276,5 +281,135 @@ Page({
   submitOrder(){
     let that = this;
     let layer = that.data.layer;
+    if (!layer.diningData.num) {
+      that.diningAction();
+      return;
+    }
+    console.log(123456)
+  },
+  //取消删除商品
+  cancelRemove(){
+    let that = this;
+    let layer = that.data.layer;
+    let setData = {};
+    layer.removeGood.show = false;
+    setData["layer"] = layer;
+    that.setData(setData);
+  },
+  // 确认删除商品
+  confirmRemove(){
+    let that = this;
+    let layer = that.data.layer;
+    let curId = that.data.curId;
+    let packages = that.data.packages;
+    let foods = that.data.foods;
+    let carList = that.data.carList;
+    let tpid;
+    let cartIndex;
+    let tmpIndex;
+    let setData = {};
+    if (curId) {
+      cartIndex = carList.findIndex((item)=>{
+        tpid = item.packageData ? 1 : 0;
+        return item.id === curId;
+      })
+      if(tpid === 1) {
+        tmpIndex = packages.findIndex((item) => {
+          return item.id === curId;
+        })
+        packages.splice(tmpIndex, 1);
+        setData["packages"] = packages;
+      }else{
+        tmpIndex = foods.findIndex((item) => {
+          return item.id === curId;
+        })
+        foods.splice(tmpIndex, 1);
+        setData["foods"] = foods;
+      }
+    }
+    carList.splice(cartIndex,1)
+    setData["carList"] = carList;
+    layer.removeGood.show = false;
+    setData["layer"] = layer;
+    that.setData(setData);
+    console.log(foods);
+  },
+  // 商品列表按钮控制器
+  goodsHandle(event){
+    let that = this;
+    let data = event.currentTarget.dataset;
+    let goodsInfo = data.goodsinfo;
+    let packages = that.data.packages;
+    let foods = that.data.foods;
+    let tpid = goodsInfo[0];//0:主食；1:整单出售套餐，2：组合出售套餐
+    let gid = goodsInfo[2];//商品id
+    let layer = that.data.layer;
+    let carList = that.data.carList;
+    let curId = that.data.curId;
+    let curTmp;
+    let setData = {};
+    curId = gid;
+    //判断当前商品是否为1 
+    //增加还是减少
+    if (goodsInfo[1] === 'add') {
+      carList.map((item) => {
+        if (item.id === gid) {
+          item.num += 1;
+        }
+      });
+      // 主食
+      if (tpid === 0) {
+        foods.map((item) => {
+          if (item.id === gid) {
+            item.num += 1;
+            item.total = (Number(item.total) + Number(item.price)).toFixed(2);
+          }
+        });
+      //套餐
+      } else {
+        packages.map((item) => {
+          if (item.id === gid) {
+            item.num += 1;
+          }
+        });
+      }
+    } else if (goodsInfo[1] === 'red') {
+      curTmp = carList.find((item) => {
+        return item.id === gid
+      });
+      if (curTmp.num === 1) {
+        layer.removeGood.text = `确定删除${curTmp.name}?`;
+        layer.removeGood.show = true;
+        setData["layer"] = layer;
+        setData["curId"] = curId;
+        that.setData(setData);
+        return;
+      }
+      carList.map((item) => {
+        if (item.id === gid) {
+          item.num -= 1;
+        }
+      });
+      // 主食
+      if (tpid === 0) {
+        foods.map((item) => {
+          if (item.id === gid) {
+            item.num -= 1;
+            item.total = (Number(item.total) - Number(item.price)).toFixed(2);
+          }
+        });
+        //套餐
+      } else if (tpid === 1) {
+        packages.map((item) => {
+          if (item.id === gid) {
+            item.num -= 1;
+          }
+        });
+      }
+    }
+    setData["carList"] = carList;
+    setData["foods"] = foods;
+    setData["packages"] = packages;
+    that.setData(setData);
   }
 })
