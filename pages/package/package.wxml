@@ -1,20 +1,20 @@
 <view class="package-page">
   <!--组合销售  --> 
-  <view wx:if="{{curItem.packageData.combination}}">
-    <view class="group-item" wx:for="{{curItem.packageData.groupItem}}" wx:key="index" data-open="{{item.open}}" wx:for-index="index1">
-      <view class="group-title" bindtap="controlOPen" data-index="{{index1}}">
+  <view wx:if="{{curGoodsItem.packageData.combination}}">
+    <view class="group-item" wx:for="{{curGoodsItem.packageData.groupItem}}" wx:key="index" data-open="{{item.open}}" wx:for-index="index1">
+      <view class="group-title" bindtap="controlOPen" data-customdata="{{[index1]}}">
         <text class="titile-left">
           <text>{{item.checkName}} - {{item.checkNum[0]}} 选 {{item.checkNum[1]}}</text> 
         </text>
-        <view class="titile-right" catchtap="resetSelct"  data-index="{{index1}}">重选</view>
+        <view class="titile-right" catchtap="resetSelct" data-customdata="{{[index1]}}">重选</view>
       </view>
       <view class="group-content">
-        <view class="content-list" wx:for="{{item.list}}" wx:key="index" data-check="{{item.checked}}" data-groupindex="{{index1}}" data-listindex="{{index}}" catchtap="checkItem">
+        <view class="content-list" wx:for="{{item.list}}" wx:key="index" data-check="{{item.checked}}" data-customdata="{{[index1,index]}}" catchtap="checkItem">
           <view class="content-left">
             <text>{{item.itemName}}</text>
              <view class="remarks" wx:if="{{item.checked && item.norm.length}}">{{item.normText}}</view>
           </view>
-          <view class="btn-right" wx:if="{{item.norm}}"  data-groupindex="{{index1}}" data-listindex="{{index}}" catchtap="openStyle">
+          <view class="btn-right" wx:if="{{item.norm}}" catchtap="openStyle" data-customdata="{{[index1,index]}}">
             <view class="btn-base">规格</view>
           </view>
           <view class="btn-right" wx:else>
@@ -28,11 +28,11 @@
   <!--整单销售  -->
   <view wx:else class="group-item all">
     <view class="group-title">
-      <text>{{curItem.packageData.packageName}}</text> 
+      <text>{{curGoodsItem.packageData.packageName}}</text> 
     </view>
     <view class="group-content">
-      <block wx:for="{{curItem.packageData.list}}" wx:key="index">
-        <view class="content-list" data-check="true" catchtap="{{item.norm ? 'openStyle' : ''}}" data-index="{{index}}">
+      <block wx:for="{{curGoodsItem.packageData.list}}" wx:key="index">
+        <view class="content-list" data-check="true" catchtap="{{item.norm ? 'openStyle' : ''}}" data-customdata="{{[index]}}">
           <view class="content-left">
             <text>{{item.itemName}}</text>
             <view class="remarks" wx:if="{{item.normText}}">
@@ -55,15 +55,15 @@
     <view class="layer-shade"></view>
     <view class="layer-page">
       <view class="layer-page-title">
-        <text class="title-txt">{{layer.norm.data.name}}</text>
+        <text class="title-txt">{{layer.curGoodsItem.itemName}}</text>
         <view class="iconfont close" bindtap="closeStyle"></view>
       </view>
       <scroll-view class="layer-page-content" scroll-y="true" scroll-with-animation="true">
-        <view class="scroll-item" wx:for="{{layer.norm.data.style}}"  wx:key="index" wx:for-item="item1" wx:for-index="index1">
+        <view class="scroll-item" wx:for="{{layer.curGoodsItem.norm}}"  wx:key="index" wx:for-item="item1" wx:for-index="index1">
           <text class="style-name">{{item1.name}}</text>
           <view class="style-group" >
             <block wx:for="{{item1.value}}"  wx:key="index" wx:for-item="item2">
-              <view class="style-item {{index === item1.chkIndex ? 'active' : ''}}" bindtap="tapItem" data-index="{{index}}" data-gouropIndex="{{index1}}">{{item2}}</view>
+              <view class="style-item {{index === item1.chkIndex ? 'active' : ''}}" bindtap="tapItem" data-customdata="{{[index1,index]}}">{{item2}}</view>
             </block>
           </view>
         </view>

@@ -23,8 +23,7 @@ Page({
       actionSheet: false,
       confirm: false,
       norm: {
-        show: false,
-        data: {}
+        show: false
       }
     },
     // 购物车统计
@@ -110,7 +109,7 @@ Page({
       }
     ],
     // 分类详情
-    categoryDetail: [
+    goods: [
       {
         id: 1,
         cid: 1,//分类id
@@ -872,59 +871,24 @@ Page({
    */
   onShow() {
     let that = this;
-    let categoryMenu = that.data.categoryMenu;
-    let categoryDetail = that.data.categoryDetail;
-    let carList = that.data.carList;
+    let goods = that.data.goods;
+    let curGoodsItem;
     let setData = {};
-    let curItem;
-    let curIndex;
-    let findItem;
-    let curItemStr;
-    let findItemStr;
+    let carList;
     //获取storage信息
-    curItem = wx.getStorageSync("curItem") ? JSON.parse(wx.getStorageSync("curItem")) : null;
-    if (curItem) {
-      curIndex = categoryDetail.findIndex((item) => {
-        return item.id === curItem.id;
-      });
-      // 判断当前商品是否存在购物车
-      findItem = carList.find((item) => {
-        return item.id === curItem.id;
-      });
-      // 是否组合套餐
-      if (findItem) {
-        if (curItem.packageData.combination) {
-          curItemStr = JSON.stringify(curItem.packageData.groupItem);
-          findItemStr = JSON.stringify(findItem.packageData.groupItem);
-        } else {
-          curItemStr = JSON.stringify(curItem.packageData.list);
-          findItemStr = JSON.stringify(findItem.packageData.list);
+    curGoodsItem = wx.getStorageSync("curGoodsItem") ? JSON.parse(wx.getStorageSync("curGoodsItem")) : false;
+    carList = wx.getStorageSync("carList") ? JSON.parse(wx.getStorageSync("carList")) : false;
+    if (curGoodsItem && carList) {
+      goods.map((item)=>{
+        if (item.id === curGoodsItem.id ) {
+          return item.num += 1;
         }
-      }
-      //是否存在购物车
-      if (findItem && curItemStr === findItemStr) {
-        carList.map((item) => {
-          if (item.id === curItem.id) {
-            item.num += 1;
-          }
-        });
-      } else {
-        carList.unshift({
-          id: curItem.id, //商品列表id
-          curIndex: curIndex, //商品列表下标
-          goodsImg: curItem.goodsImg,//商品图片
-          avatar: curItem.avatar,
-          name: curItem.goodsName, //商品名称
-          price: curItem.price, //商品价格
-          num: 1, //商品数量
-          packageData: curItem.packageData
-        })
-      }
-      categoryDetail[curIndex].num += 1;
+      })
       setData["carList"] = carList
-      setData["categoryDetail"] = categoryDetail
-      that.cartCount(setData, curIndex, "add");
-      wx.removeStorageSync("curItem");
+      setData["goods"] = goods
+      that.cartCount(setData, curGoodsItem, "add");
+      wx.removeStorageSync("curGoodsItem");
+      wx.removeStorageSync("carList");
     }
     //设置data
     that.setData(setData);
@@ -994,7 +958,7 @@ Page({
   // 确认清空购物车
   confirmAction() {
     var that = this;
-    let categoryDetail = that.data.categoryDetail;
+    let goods = that.data.goods;
     let cartStatistisc = that.data.cartStatistisc;
     let footerInfo = that.data.footerInfo;
     let setData = {};
@@ -1006,74 +970,81 @@ Page({
     setData["footerInfo"] = footerInfo;
     setData["layer.confirm"] = false;//关闭清空购物车弹窗
     setData["layer.actionSheet"] = false;//关闭购物车弹窗
-    setData["categoryDetail"] = categoryDetail;//商品列表数量复原
+    setData["goods"] = goods;//商品列表数量复原
     setData["cartStatistisc"] = cartStatistisc;//购物车统计清空
-    // 把categoryDetail所有对象num不为0的设置为0
-    categoryDetail.forEach((item, index) => {
+    // 把goods所有对象num不为0的设置为0
+    goods.forEach((item, index) => {
       if (item.num !== 0) {
-        categoryDetail[index].num = 0
+        goods[index].num = 0
       }
     })
-    setData["categoryDetail"] = categoryDetail;//商品列表数量复原
+    setData["goods"] = goods;//商品列表数量复原
     that.setData(setData);
   },
   // 商品列表按钮控制器
   goodsHandle(event) {
     let that = this;
-    let curIndex = event.target.dataset.itemindex
-    let curItem = that.data.categoryDetail[curIndex];
+    let data = event.target.dataset;
+    let curId = data.customdata[0];
+    let control = data.customdata[1];
+    let goods = that.data.goods;
     let carList = that.data.carList;
-    let control = event.target.dataset.control;
+    let layer = that.data.layer;
+    let curGoodsItem;
+    let curCartIndex;
+    let findItem;
     let setData = {};
+    curGoodsItem = goods.find((item)=>{
+      return item.id === curId;
+    });
     // 是否多规格
-    if (curItem.norm) {
-      // 弹窗规格信息
-      let layerNorm = {
-        id: curItem.id,
-        name: curItem.goodsName,
-        price: curItem.price,
-        style: curItem.norm,
-        curIndex: curIndex
-      }
-      that.setData({ "layer.norm.data": layerNorm, "layer.norm.show": true });
+    if (curGoodsItem.norm) {
+      layer.norm.show = true;
+      setData["layer"] = layer;
+      setData["curGoodsItem"] = curGoodsItem;
+      that.setData(setData);
+      return 
     } else {
-      let index = that.existCart(curItem);
-      // 是否存在购物车中
-      if (index !== -1) {
-        //是否为减少 
-        if (control === "red") {
-          if (curItem.num === 1) {
-            carList.splice(index, 1)
-            setData["carList"] = carList;
-            setData["categoryDetail[" + curIndex + "].num"] = curItem.num - 1;
-            that.cartCount(setData, curIndex, control);
-            return false;
-          } else {
-            setData["carList[" + index + "].num"] = carList[index].num - 1;
-            setData["categoryDetail[" + curIndex + "].num"] = curItem.num - 1;
+      // 是否为添加
+      if (control === "add") {
+        findItem = that.existCart(curGoodsItem);
+        if (findItem) {
+          carList.map((item) => {
+            if (item.id === curGoodsItem.id) {
+              return item.num += 1
+            }
+          });
+        }else{
+          carList.unshift(curGoodsItem);
+        }
+        goods.map((item) => {
+          if (item.id === curGoodsItem.id) {
+            item.num += 1
           }
+        });
+      // 减少  
+      }else{
+        if (curGoodsItem.num === 1) {
+          curCartIndex = carList.findIndex((item) => {
+            return item.id === curGoodsItem.id;
+          });
+          carList.splice(curCartIndex, 1);
         } else {
-          setData["carList[" + index + "].num"] = carList[index].num + 1;
-          setData["categoryDetail[" + curIndex + "].num"] = curItem.num + 1;
+          carList.map((item) => {
+            if (item.id === curGoodsItem.id) {
+              item.num -= 1
+            }
+          });
         }
-      } else {
-        // 是否为添加
-        if (control === "add") {
-          carList.unshift({
-            id: curItem.id, //商品列表id
-            curIndex: curIndex, //商品列表下标
-            goodsImg: curItem.goodsImg,//商品图片
-            remarks: curItem.remarks,
-            avatar: curItem.avatar,
-            name: curItem.goodsName, //商品名称
-            price: curItem.price, //商品价格
-            num: curItem.num + 1, //商品数量
-          })
-          setData["categoryDetail[" + curIndex + "].num"] = curItem.num + 1;
-          setData["carList"] = carList
-        }
+        goods.map((item) => {
+          if (item.id === curGoodsItem.id) {
+            item.num -= 1
+          }
+        });
       }
-      that.cartCount(setData, curIndex, control);
+      setData["goods"] = goods;
+      setData["carList"] = carList;
+      that.cartCount(setData, curGoodsItem, control);
     }
   },
   //购物车列表控制器按钮
@@ -1083,22 +1054,22 @@ Page({
     let control = event.target.dataset.control;
     let carList = that.data.carList;
     let curIndex = carList[index].curIndex;
-    let curItem = that.data.categoryDetail[curIndex];
+    let curItem = that.data.goods[curIndex];
     let setData = {};
     if (control === "red") {
       if (carList[index].num === 1) {
         carList.splice(index, 1)
         setData["carList"] = carList;
-        setData["categoryDetail[" + curIndex + "].num"] = curItem.num - 1;
+        setData["goods[" + curIndex + "].num"] = curItem.num - 1;
         that.cartCount(setData, curIndex, control);
         return false;
       } else {
         setData["carList[" + index + "].num"] = carList[index].num - 1;
-        setData["categoryDetail[" + curIndex + "].num"] = curItem.num - 1;
+        setData["goods[" + curIndex + "].num"] = curItem.num - 1;
       }
     } else {
       setData["carList[" + index + "].num"] = carList[index].num + 1;
-      setData["categoryDetail[" + curIndex + "].num"] = curItem.num + 1;
+      setData["goods[" + curIndex + "].num"] = curItem.num + 1;
     }
     that.cartCount(setData, curIndex, control);
   },
@@ -1108,16 +1079,14 @@ Page({
    * curIndex: 商品列表的index
    * control： 是添加还是减少
    */
-  cartCount(setData, curIndex, control) {
+  cartCount(setData, curGoodsItem, control) {
     let that = this;
-    let carList = that.data.carList;
     let cartStatistisc = that.data.cartStatistisc;
-    let curItem = that.data.categoryDetail[curIndex];
     let footerInfo = that.data.footerInfo;
     //把总价转为数字型
     let tmpNum = cartStatistisc.amount
     let tmpPrice = Number(cartStatistisc.price);
-    let curPrice = Number(curItem.price);
+    let curPrice = Number(curGoodsItem.price);
     if (control === "red") {
       tmpNum -= 1;
       tmpPrice -= curPrice;
@@ -1145,62 +1114,65 @@ Page({
     this.setData({ "layer.norm.show": false });
   },
   // 商品是否存在购物车
-  existCart(item, norm) {
+  existCart(item) {
     let that = this;
     let carList = that.data.carList;
-    return carList.findIndex((list) => {
-      if (norm) {
-        //是多规格商品时，判断商品id是不是同一个，再判断选在的商品规格是否在购物车已经存在
-        return list.id === item.id && untils.sameArray(list.norm, norm)
-      } else {
-        return list.id === item.id
+    return carList.find((cItem) => {
+      if (cItem.norm) {
+        return cItem.id === item.id && JSON.stringify(cItem.norm) === JSON.stringify(item.norm);
+      }else{
+       return cItem.id === item.id
       }
     })
   },
   // 购物车规格事件
   tapItem(event) {
-    let index = event.target.dataset.index;
-    let groupindex = event.target.dataset.gouropindex;
-    let chkObj = {};
-    chkObj["layer.norm.data.style[" + groupindex + "].chkIndex"] = index;
-    this.setData(chkObj);
+    let that = this;
+    let data = event.target.dataset;
+    let groupIndex = data.customdata[0];
+    let itemIndex = data.customdata[1];
+    let curGoodsItem = that.data.curGoodsItem;
+    let setData = {};
+    curGoodsItem.norm[groupIndex].chkIndex = itemIndex;
+    setData["curGoodsItem"] = curGoodsItem;
+    this.setData(setData);
   },
   // 商品规格选择好了
   selectOk() {
     let that = this;
-    let norm = that.data.layer.norm;
-    let curIndex = norm.data.curIndex;
-    let curItem = that.data.categoryDetail[curIndex];
+    let curGoodsItem = that.data.curGoodsItem;
     let carList = that.data.carList;
+    let goods = that.data.goods;
+    let layer = that.data.layer;
     let tmpNorm = [];
     let setData = {};
     //筛选出当前选择的规格商品
-    norm.data.style.forEach((item, index) => {
+    curGoodsItem.norm.forEach((item, index) => {
       tmpNorm.push(item.value[item.chkIndex]);
     })
-    let index = that.existCart(curItem, tmpNorm);
+    curGoodsItem.normText = tmpNorm.join("；");
+    let findItem = that.existCart(curGoodsItem);
     // 该商品是否存在购物车中
-    if (index !== -1) {
-      setData["carList[" + index + "].num"] = carList[index].num + 1;
-      setData["categoryDetail[" + curIndex + "].num"] = curItem.num + 1;
+    if (findItem) {
+      carList.map((item) => {
+        if (item.id === curGoodsItem.id) {
+          item.num += 1
+        }
+      });
     } else {
-      carList.unshift({
-        id: curItem.id, //商品列表id
-        curIndex: curIndex, //商品列表下标
-        goodsImg: curItem.goodsImg,//商品图片
-        remarks: curItem.remarks,
-        avatar: curItem.avatar,
-        name: curItem.goodsName, //商品名称
-        price: curItem.price, //商品价格
-        num: 1, //商品数量,
-        norm: tmpNorm, //商品规格
-        normText: tmpNorm.join("；")
-      })
-      setData["carList"] = carList;
-      setData["categoryDetail[" + curIndex + "].num"] = curItem.num + 1;
+      curGoodsItem.num = 1;
+      carList.unshift(curGoodsItem);
     }
-    setData["layer.norm.show"] = false;
-    that.cartCount(setData, curIndex, "add");
+    goods.map((item) => {
+      if (item.id === curGoodsItem.id) {
+        item.num += 1
+      }
+    });
+    layer.norm.show = false;
+    setData["carList"] = carList
+    setData["goods"] = goods;
+    setData["layer"] = layer;
+    that.cartCount(setData, curGoodsItem, "add");
   },
   //禁止删除
   forbidDel(event) {
@@ -1219,12 +1191,17 @@ Page({
   // 选择套餐
   navigatorHandle(event) {
     let that = this;
- 
-    let curIndex = event.target.dataset.itemindex
-    let curItem = that.data.categoryDetail[curIndex];
+    let data = event.target.dataset;
+    let curId = data.customdata[0];
+    let goods = that.data.goods;
+    let curGoodsItem;
+    curGoodsItem = goods.find((item) => {
+      return item.id === curId;
+    });
     let carList = that.data.carList;
     // 把当前选择的套餐保存在本地
-    wx.setStorageSync("curItem", JSON.stringify(curItem));
+    wx.setStorageSync("curGoodsItem", JSON.stringify(curGoodsItem));
+    wx.setStorageSync("carList", JSON.stringify(carList));
     wx.navigateTo({
       url: '/pages/package/package'
     });
@@ -1233,8 +1210,10 @@ Page({
   viewOrder(){
     let that = this;
     let carList = that.data.carList;
-    if (carList.length) {
+    let categoryMenu = that.data.categoryMenu;
+    if (carList.length && categoryMenu.length) {
       wx.setStorageSync("carList", JSON.stringify(carList));
+      wx.setStorageSync("categoryMenu", JSON.stringify(categoryMenu));
     }
     wx.navigateTo({
       url: '/pages/order/order',

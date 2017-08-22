@@ -1,8 +1,9 @@
 {
   "pages":[
-    "pages/order/order",
     "pages/index/index",
-    "pages/package/package"
+    "pages/package/package",
+    "pages/order/order"
+  
   ],
   "window":{
     "backgroundTextStyle":"light",

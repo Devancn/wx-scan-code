@@ -7,26 +7,14 @@ Page({
     layer: {
       norm: {
         show: false,
-        data: {
-          "id": 2,
-          "name": "刷卡机老师第六课老师",
-          "price": "120.00",
-          "style": [
-            { "name": "温度", "value": ["常温", "冰镇", "加热"], "chkIndex": 0 },
-            { "name": "份量", "value": ["小份", "中份", "大份"], "chkIndex": 0 },
-            { "name": "辣度", "value": ["微辣", "中辣", "麻辣"], "chkIndex": 0 },
-            { "name": "规格", "value": ["小杯", "中杯", "大杯"], "chkIndex": 0 }
-          ],
-          "curIndex": 1
-        }
       },
       know: {
         show: false,
         text: ""
       }
     },
-    // 商品信息
-    curItem: {},
+    // 当前商品信息
+    curGoodsItem: {},
   },
 
   /**
@@ -43,9 +31,12 @@ Page({
    */
   onReady: function () {
     let that = this;
-    let storeItem = JSON.parse(wx.getStorageSync("curItem"));
+    let curGoodsItem = wx.getStorageSync("curGoodsItem") ? JSON.parse(wx.getStorageSync("curGoodsItem")) : {};
+    let carList = wx.getStorageSync("carList") ? JSON.parse(wx.getStorageSync("carList")) : [];
     let setData = {};
-    setData["curItem"] = storeItem;
+    setData["curGoodsItem"] = curGoodsItem;
+    setData["carList"] = carList;
+    console.log(setData);
     that.setData(setData);
   },
 
@@ -93,88 +84,82 @@ Page({
   // 开启规格弹窗
   openStyle(event) {
     let that = this;
-    let curItem = that.data.curItem;
+    let curGoodsItem = that.data.curGoodsItem;
     let layer = that.data.layer;
-    let dataset = event.currentTarget.dataset;
-    let index;
-    let layerNorm;
-    let groupIndex;
-    let listIndex;
+    let data = event.currentTarget.dataset;
+    let curListIndex = [];
     let setData = {};
-    if (curItem.packageData.combination) {
+    if (curGoodsItem.packageData.combination) {
       // 组合销售弹窗规格信息
-      groupIndex = dataset.groupindex;
-      listIndex = dataset.listindex;
-      let chkNum = curItem.packageData.groupItem[groupIndex].checkNum;
-      let checked = curItem.packageData.groupItem[groupIndex].list[listIndex].checked;
+      curListIndex.push(data.customdata[0]);
+      curListIndex.push(data.customdata[1]);
+      let chkNum = curGoodsItem.packageData.groupItem[curListIndex[0]].checkNum;
+      let checked = curGoodsItem.packageData.groupItem[curListIndex[0]].list[curListIndex[1]].checked;
       //过滤掉没有相中的项
-      let filter = curItem.packageData.groupItem[groupIndex].list.filter((item)=>{
+      let filter = curGoodsItem.packageData.groupItem[curListIndex[0]].list.filter((item) => {
         return item.checked;
       });
       //判断当前选中的项是否已经超过了应选项并且当前项是选中状态
       if (filter.length >= chkNum[1] && !checked) {
-        layer.know.text ="该组商品已选满";
+        layer.know.text = "该组商品已选满";
         layer.know.show = true;
         setData["layer"] = layer;
         that.setData(setData);
         return;
       }
-      layerNorm = {
-        name: curItem.packageData.groupItem[groupIndex].list[listIndex].itemName,
-        style: curItem.packageData.groupItem[groupIndex].list[listIndex].norm,
-        groupIndex: groupIndex,
-        listIndex: listIndex
-      }
-    }else{
-      // 整单销售弹窗规格信息
-      index = dataset.index;
-      layerNorm = {
-        name: curItem.packageData.list[index].itemName,
-        style: curItem.packageData.list[index].norm,
-        curIndex: index
-      }
+      layer.curGoodsItem = {
+        itemName: curGoodsItem.packageData.groupItem[curListIndex[0]].list[curListIndex[1]].itemName,
+        norm: curGoodsItem.packageData.groupItem[curListIndex[0]].list[curListIndex[1]].norm,
+        curListIndex: curListIndex
+      };
+    } else {
+      curListIndex.push(data.customdata[0]);
+      layer.curGoodsItem = {
+        itemName: curGoodsItem.packageData.list[curListIndex[0]].itemName,
+        norm: curGoodsItem.packageData.list[curListIndex[0]].norm,
+        curListIndex: curListIndex
+      };
     }
-    layer.norm.data = layerNorm;
     layer.norm.show = true;
+    layer.norm.curListIndex = curListIndex;
     setData["layer"] = layer;
     that.setData(setData);
   },
-  groupNorm(){
-
-  },
   // 购物车规格事件
   tapItem(event) {
-    let index = event.target.dataset.index;
-    let groupindex = event.target.dataset.gouropindex;
-    let chkObj = {};
-    chkObj["layer.norm.data.style[" + groupindex + "].chkIndex"] = index;
-    this.setData(chkObj);
+    let that = this;
+    let data = event.target.dataset;
+    let curGroupIndex = data.customdata[0];
+    let cirItemIndex = data.customdata[1];
+    let layer = that.data.layer;
+    let setData = {};
+    layer.curGoodsItem.norm[curGroupIndex].chkIndex = cirItemIndex;
+    setData["layer"] = layer;
+    this.setData(setData);
   },
   // 商品规格选择好了
   selectOk() {
     let that = this;
-    let norm = that.data.layer.norm;
-    let curIndex;
-    let curItem = that.data.curItem;
+    let curGoodsItem = that.data.curGoodsItem;
+    let layer = that.data.layer;
+    let norm = layer.curGoodsItem.norm;
+    let curListIndex = layer.curGoodsItem.curListIndex;
     let tmpNorm = [];
     let setData = {};
-    let groupIndex = norm.data.groupIndex;
-    let listIndex = norm.data.listIndex;
     //筛选出当前选择的规格商品
-    norm.data.style.forEach((item, index) => {
+    norm.forEach((item, index) => {
       tmpNorm.push(item.value[item.chkIndex]);
     })
     //组合套餐
-    if (curItem.packageData.combination) {
-      curItem.packageData.groupItem[groupIndex].list[listIndex].checked = true;
-      curItem.packageData.groupItem[groupIndex].list[listIndex].checkNorm = tmpNorm;
-      curItem.packageData.groupItem[groupIndex].list[listIndex].normText = tmpNorm.join("；");
-    }else{
-      curIndex = norm.data.curIndex
-      curItem.packageData.list[curIndex].checkNorm = tmpNorm;
-      curItem.packageData.list[curIndex].normText = tmpNorm.join("；");
+    if (curListIndex.length === 2) {
+      curGoodsItem.packageData.groupItem[curListIndex[0]].list[curListIndex[1]].checked = true;
+      curGoodsItem.packageData.groupItem[curListIndex[0]].list[curListIndex[1]].checkNorm = tmpNorm;
+      curGoodsItem.packageData.groupItem[curListIndex[0]].list[curListIndex[1]].normText = tmpNorm.join("；");
+    } else {
+      curGoodsItem.packageData.list[curListIndex[0]].checkNorm = tmpNorm;
+      curGoodsItem.packageData.list[curListIndex[0]].normText = tmpNorm.join("；");
     }
-    setData["curItem"] = curItem;
+    setData["curGoodsItem"] = curGoodsItem;
     setData["layer.norm.show"] = false;
     that.setData(setData);
 
@@ -187,8 +172,8 @@ Page({
   // 套餐选择完毕
   packageOk() {
     let that = this;
-    let curItem = that.data.curItem;
-    let setData = {};
+    let curGoodsItem = that.data.curGoodsItem;
+    let carList = that.data.carList;
     let chkNum = 0;
     let groupItem;
     let itemLength = 0;
@@ -200,9 +185,11 @@ Page({
     let filterItem = [];
     let checkCount = 0;
     let layer = that.data.layer;
+    let fineItem;
+    let setData = {};
     // 是否是组合套餐
-    if (curItem.packageData.combination) {
-      groupItem = curItem.packageData.groupItem;
+    if (curGoodsItem.packageData.combination) {
+      groupItem = curGoodsItem.packageData.groupItem;
       itemLength = groupItem.length;
       for (let i = 0; i < itemLength; i++) {
         list = groupItem[i].list;
@@ -214,11 +201,11 @@ Page({
           if (filterItem.length === checkNum) {
             checkCount++;
             checkFlag = true;
-          }else {
+          } else {
             isChecked = false;
             checkFlag = true;
           }
-        }else {
+        } else {
           isChecked = false;
         }
       }
@@ -227,89 +214,102 @@ Page({
           layer.know.text = "还没有选够哟~";
           layer.know.show = true;
           setData["layer"] = layer;
-        }else {
+        } else {
           layer.know.text = "您还没有选择商品";
           layer.know.show = true;
           setData["layer"] = layer;
         }
-        that.setData(setData);
-        return;
+       return that.setData(setData);
       }
     }
-    curItem.num += 1;
+    curGoodsItem.num = 1;
     // 把当前选择的套餐保存在本地
-    setData["curItem"] = curItem;
-    wx.setStorageSync("curItem", JSON.stringify(curItem));
+    fineItem = carList.find((item) => {
+      return item.id === curGoodsItem.id && JSON.stringify(item.packageData) === JSON.stringify(curGoodsItem.packageData);
+    })
+    if (fineItem) {
+      carList.map((item) => {
+        if (item.id === curGoodsItem.id && JSON.stringify(item.packageData) === JSON.stringify(curGoodsItem.packageData)) {
+          item.num += 1;
+        }
+      })
+    } else {
+      carList.unshift(curGoodsItem)
+    }
+    wx.setStorageSync("curGoodsItem", JSON.stringify(curGoodsItem));
+    wx.setStorageSync("carList", JSON.stringify(carList));
     wx.navigateBack()
   },
   //控制展开收缩分组
   controlOPen(event) {
     let that = this;
-    let curItem = that.data.curItem;
-    let dataset = event.currentTarget.dataset;
-    let index = dataset.index;
-    let open = curItem.packageData.groupItem[index].open;
+    let curGoodsItem = that.data.curGoodsItem;
+    let data = event.currentTarget.dataset;
+    let curListIndex = data.customdata;
+    let open = curGoodsItem.packageData.groupItem[curListIndex[0]].open;
     let setData = {};
-    curItem.packageData.groupItem[index].open = !open;
-    setData["curItem"] = curItem;
+    curGoodsItem.packageData.groupItem[curListIndex[0]].open = !open;
+    setData["curGoodsItem"] = curGoodsItem;
     that.setData(setData);
   },
   // 重新选择
   resetSelct(event) {
     let that = this;
-    let curItem = that.data.curItem;
-    let dataset = event.currentTarget.dataset;
-    let groupIndex = dataset.index;
+    let curGoodsItem = that.data.curGoodsItem;
+    let data = event.currentTarget.dataset;
+    let curListIndex = data.customdata;
     let setData = {};
-    curItem["packageData"].groupItem[groupIndex].list.map((item, index)=> {
+    curGoodsItem["packageData"].groupItem[curListIndex[0]].list.map((item, index) => {
       item.checked = false;
     });
-    setData["curItem"] = curItem;
+    setData["curGoodsItem"] = curGoodsItem;
     that.setData(setData);
   },
   //选择商品
   checkItem(event) {
     let that = this;
-    let curItem = that.data.curItem;
-    let dataset = event.currentTarget.dataset;
-    let groupIndex = dataset.groupindex;
-    let listIndex = dataset.listindex;
+    let curGoodsItem = that.data.curGoodsItem;
+    let data = event.currentTarget.dataset;
+    let curListIndex = data.customdata;
     let layer = that.data.layer;
+    let chkNum = curGoodsItem.packageData.groupItem[curListIndex[0]].checkNum;
+    let checked = curGoodsItem.packageData.groupItem[curListIndex[0]].list[curListIndex[1]].checked;
     let setData = {};
-    let chkNum = curItem.packageData.groupItem[groupIndex].checkNum;
-    let checked = curItem.packageData.groupItem[groupIndex].list[listIndex].checked;
-    let layerNorm;
+
     //过滤掉没有相中的项
-    let filter = curItem.packageData.groupItem[groupIndex].list.filter((item)=>{
+    let filter = curGoodsItem.packageData.groupItem[curListIndex[0]].list.filter((item) => {
       return item.checked;
     });
     //选中的项大于规定项
-    if (filter.length >= chkNum[1] && !checked) {
+    if (chkNum[1] === 1 && !checked) {
+      curGoodsItem.packageData.groupItem[curListIndex[0]].list.map((item) => {
+        item.checked = false;
+      })
+      curGoodsItem.packageData.groupItem[curListIndex[0]].list[curListIndex[1]].checked = !checked;
+      setData["curGoodsItem"] = curGoodsItem;
+    } else if (filter.length >= chkNum[1] && !checked) {
       layer.know.text = "该组商品已选满";
       layer.know.show = true;
       setData["layer"] = layer;
-    }else {
-      // 是否为规格商品
-      if (curItem.packageData.groupItem[groupIndex].list[listIndex].norm && !checked) {
-        // 规格弹窗
-        layerNorm = {
-          name: curItem.packageData.groupItem[groupIndex].list[listIndex].itemName,
-          style: curItem.packageData.groupItem[groupIndex].list[listIndex].norm,
-          groupIndex: groupIndex,
-          listIndex: listIndex
-        }
-        layer.norm.data = layerNorm;
+    } else {
+      // 是否有规格选择
+      if (curGoodsItem.packageData.groupItem[curListIndex[0]].list[curListIndex[1]].norm && !checked) {
+        layer.curGoodsItem = {
+          itemName: curGoodsItem.packageData.groupItem[curListIndex[0]].list[curListIndex[1]].itemName,
+          norm: curGoodsItem.packageData.groupItem[curListIndex[0]].list[curListIndex[1]].norm,
+          curListIndex: curListIndex
+        };
         layer.norm.show = true;
         setData["layer"] = layer;
       } else {
-        curItem.packageData.groupItem[groupIndex].list[listIndex].checked = !checked;
-        setData["curItem"] = curItem;
+        curGoodsItem.packageData.groupItem[curListIndex[0]].list[curListIndex[1]].checked = !checked;
+        setData["curGoodsItem"] = curGoodsItem;
       }
     }
     that.setData(setData);
   },
   // 知道了弹窗
-  knowHandle(){
+  knowHandle() {
     let that = this;
     let layer = that.data.layer;
     let setData = {};

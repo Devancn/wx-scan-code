@@ -10,7 +10,7 @@
 <scroll-view class="category-detail" scroll-y="true" scroll-with-animation="true" scroll-into-view="{{toView}}">
   <view class="class-item" id="cateTop">
       <text class="class-title">{{categoryMenu[defaltIndex].name}} - {{categoryMenu[defaltIndex].translate}} ({{categoryMenu[defaltIndex].num}})</text>
-      <block wx:for="{{categoryDetail}}" wx:key="index">
+      <block wx:for="{{goods}}" wx:key="index">
         <view class="goods" wx:if="{{categoryMenu[defaltIndex].id === item.cid}}"> 
           <view class="goods-img-area"> 
             <image src="{{item.goodsImg}}"></image>
@@ -27,15 +27,15 @@
               </view>  
               <view class="control-button">
                 <block wx:if="{{item.num !== 0}}">
-                  <view class="iconfont control-reduce {{item.norm || item.packageData ? 'forbid' : ''}}" bindtap="{{item.norm || item.packageData ? 'forbidDel' : 'goodsHandle'}}" data-control="red"  data-itemindex="{{index}}"></view>
+                  <view class="iconfont control-reduce {{item.norm || item.packageData ? 'forbid' : ''}}" bindtap="{{item.norm || item.packageData ? 'forbidDel' : 'goodsHandle'}}"  data-customdata="{{[item.id,'red']}}"></view>
                   <text class="control-text">{{item.num}}</text>
                   <text wx:if="{{forbidTip.show}}" class="forbid-tips" style="top:{{forbidTip.offsetTop + 'px'}}">多规格商品只能去购物车删除哦</text>
                 </block>
                 <block wx:if="{{item.packageData}}">
-                  <view class="iconfont control-increase" bindtap="navigatorHandle" data-itemindex="{{index}}"></view >
+                  <view class="iconfont control-increase" bindtap="navigatorHandle" data-customdata="{{[item.id,'add']}}"></view >
                 </block>
                 <block wx:else>
-                  <view class="iconfont control-increase" bindtap="goodsHandle" data-control="add" data-itemindex="{{index}}"></view>
+                  <view class="iconfont control-increase" bindtap="goodsHandle" data-customdata="{{[item.id,'add']}}"></view>
                 </block>
               </view>
             </view>
@@ -71,7 +71,7 @@
     <scroll-view class="layer-page-content" scroll-y="true" scroll-with-animation="true">
       <view class="item" wx:for="{{carList}}" wx:key="index">
         <view class="item-left">
-          <text class="sup">{{item.name}}</text>
+          <text class="sup">{{item.goodsName}}</text>
             <text class="sub" wx:if="{{item.normText}}">{{item.normText}}</text> 
         </view>
         <view class="total-text">¥<text class="text">{{item.price}}</text></view>
@@ -102,15 +102,15 @@
   <view class="layer-shade"></view>
   <view class="layer-page">
     <view class="layer-page-title">
-      <text class="title-txt">{{layer.norm.data.name}}</text>
+      <text class="title-txt">{{curGoodsItem.goodsName}}</text>
       <view class="iconfont close" bindtap="closeStyle"></view>
     </view>
     <scroll-view class="layer-page-content" scroll-y="true" scroll-with-animation="true">
-      <view class="scroll-item" wx:for="{{layer.norm.data.style}}"  wx:key="index" wx:for-item="item1" wx:for-index="index1">
+      <view class="scroll-item" wx:for="{{curGoodsItem.norm}}"  wx:key="index" wx:for-item="item1" wx:for-index="index1">
         <text class="style-name">{{item1.name}}</text>
         <view class="style-group" >
           <block wx:for="{{item1.value}}"  wx:key="index" wx:for-item="item2">
-            <view class="style-item {{index === item1.chkIndex ? 'active' : ''}}" bindtap="tapItem" data-index="{{index}}" data-gouropIndex="{{index1}}">{{item2}}</view>
+            <view class="style-item {{index === item1.chkIndex ? 'active' : ''}}" bindtap="tapItem" data-customdata="{{[index1,index]}}">{{item2}}</view>
           </block>
         </view>
       </view>
@@ -118,7 +118,7 @@
     <view class="botttom-message">
       <view class="price-box">
         <text class="symbol">¥</text>
-        <text class="price">{{layer.norm.data.price}}</text>
+        <text class="price">{{curGoodsItem.price}}</text>
       </view>
       <view class="btn-base" catchtap="selectOk">选好了</view>
     </view>
