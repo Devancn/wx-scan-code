@@ -12,7 +12,16 @@ App({
    * 当小程序启动，或从后台进入前台显示，会触发 onShow
    */
   onShow: function (options) {
-    
+    // wx.request({
+    //   url:"http://api.weishangtui.com.cn/app/scan/category",
+    //   data:{
+    //     store_id: "49",
+    //     position: "A2"
+    //   },
+    //   success(res){
+    //     console.log(res.data)
+    //   }
+    // })
   },
 
   /**

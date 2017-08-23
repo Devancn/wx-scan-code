@@ -9,7 +9,7 @@ Page({
     // 滚动到某个位置
     toView: "",
     // 底部信息
-    footerInfo:{
+    footerInfo: {
       state: 0,//0：查看订单，1：选好了
       text: "查看订单"
     },
@@ -121,12 +121,13 @@ Page({
         isGood: true,
         spicy: 2,
         price: "121.00",
+        itemPrice: '',
         avatar: 'https://wx.qlogo.cn/mmopen/Q3auHgzwzM7eQhicv7SbAE5oxGd4XQVPzmgU5R0SWOTiavIUBynUuiacWJooAy41bRyhk7LrMPLyn5HppywDXyNwoATT88FL7ejtJZ5KaolQps/0',
         num: 0
       },
       {
         id: 2,
-        cid: 1,
+        cid: 2,
         goodsName: '刷卡机老师第六课老师',
         goodsImg: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1501825683750&di=f7881907335b2ad535a7da8dadfbfb19&imgtype=0&src=http%3A%2F%2Fpic5.photophoto.cn%2F20071221%2F0042040377755194_b.jpg',
         goodsDesc: '胜多负少是就分类看手机离开是解放路口谁离开房间是了肯德基离开家上课了 ',
@@ -134,6 +135,7 @@ Page({
         isGood: true,
         spicy: 0,
         price: "120.00",
+        itemPrice: '',
         avatar: 'https://wx.qlogo.cn/mmopen/Q3auHgzwzM7eQhicv7SbAE5oxGd4XQVPzmgU5R0SWOTiavIUBynUuiacWJooAy41bRyhk7LrMPLyn5HppywDXyNwoATT88FL7ejtJZ5KaolQps/0',
         num: 0,
         norm: [
@@ -168,6 +170,7 @@ Page({
         isGood: false,
         spicy: 3,
         price: "106.00",
+        itemPrice: '',
         avatar: 'https://wx.qlogo.cn/mmopen/Q3auHgzwzM7eQhicv7SbAE5oxGd4XQVPzmgU5R0SWOTiavIUBynUuiacWJooAy41bRyhk7LrMPLyn5HppywDXyNwoATT88FL7ejtJZ5KaolQps/0',
         num: 0,
         packageData: {
@@ -175,7 +178,7 @@ Page({
           packageName: "整单销售",
           list: [
             { itemName: "盐烤原味新西兰青口贝", remarks: '微辣微辣微辣' },
-            { itemName: "照烧黄共鱼", remarks: '淡一点淡一点', norm: [{ name: "铁板做法", value: ["铁板", "盐烧"], chkIndex: 0 }, { name: "温度", value: ["常温", "冰镇", "加热"],  chkIndex: 0}], checkNorm: ["铁板", "常温"], normText:"铁板；常温"}
+            { itemName: "照烧黄共鱼", remarks: '淡一点淡一点', norm: [{ name: "铁板做法", value: ["铁板", "盐烧"], chkIndex: 0 }, { name: "温度", value: ["常温", "冰镇", "加热"], chkIndex: 0 }], checkNorm: ["铁板", "常温"], normText: "铁板；常温" }
           ]
         }
       },
@@ -189,6 +192,7 @@ Page({
         isGood: true,
         spicy: 2,
         price: "121.00",
+        itemPrice: '',
         avatar: 'https://wx.qlogo.cn/mmopen/Q3auHgzwzM7eQhicv7SbAE5oxGd4XQVPzmgU5R0SWOTiavIUBynUuiacWJooAy41bRyhk7LrMPLyn5HppywDXyNwoATT88FL7ejtJZ5KaolQps/0',
         num: 0
       },
@@ -202,6 +206,7 @@ Page({
         isGood: true,
         spicy: 0,
         price: "120.00",
+        itemPrice: '',
         num: 0,
         norm: [
           {
@@ -228,13 +233,14 @@ Page({
       },
       {
         id: 6,
-        cid: 2,
+        cid: 1,
         goodsName: '新品推荐-南美风情肉香荟比萨',
         goodsImg: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1501825683749&di=f60e65d58145f92045379afc58e84711&imgtype=0&src=http%3A%2F%2Fimg.taopic.com%2Fuploads%2Fallimg%2F120528%2F188952-12052Q25F491.jpg',
         goodsDesc: '精心挑选肉质厚实的本地鸡，味道.很赞特别推荐！鸡肉味道很赞，味道很赞特别推荐！',
         isGood: false,
         spicy: 3,
         price: "106.00",
+        itemPrice: '',
         avatar: 'https://wx.qlogo.cn/mmopen/Q3auHgzwzM7eQhicv7SbAE5oxGd4XQVPzmgU5R0SWOTiavIUBynUuiacWJooAy41bRyhk7LrMPLyn5HppywDXyNwoATT88FL7ejtJZ5KaolQps/0',
         num: 0,
         packageData: {
@@ -243,7 +249,7 @@ Page({
           groupItem: [
             {
               checkName: "小吃",
-              checkNum: [2,1],//2选1
+              checkNum: [2, 1],//2选1
               open: true,//是否展开
               list: [
                 { itemName: "够粗的美式薯条 (原味、麻辣)", checked: false, remarks: '这是备注信息' },
@@ -255,10 +261,10 @@ Page({
               checkNum: [4, 2],//4选2
               open: true,//是否展开
               list: [
-                { itemName: "招牌过木架烤三角肥牛2000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: '这是备注信息'},
-                { itemName: "果木烤金蒜牛扒", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: '这是备注信息'},
+                { itemName: "招牌过木架烤三角肥牛2000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: '这是备注信息' },
+                { itemName: "果木烤金蒜牛扒", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: '这是备注信息' },
                 { itemName: "招牌过木架烤三角肥牛", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: '这是备注信息' },
-                { itemName: "招牌过木架烤三角肥牛1000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: '这是备注信息'}
+                { itemName: "招牌过木架烤三角肥牛1000g", norm: [{ name: "牛扒食法", value: ["3成熟", "5成熟", "7成熟", "9成熟", "全熟"], chkIndex: 0 },], checked: false, checkNorm: ["3成熟"], normText: "3成熟", remarks: '这是备注信息' }
               ]
             },
             {
@@ -266,8 +272,8 @@ Page({
               checkNum: [3, 2],//3选2
               open: true,//是否展开
               list: [
-                { itemName: "青岛啤酒", checked: false, remarks: ''},
-                { itemName: "莫拉利白葡萄酒", checked: false, remarks: ''},
+                { itemName: "青岛啤酒", checked: false, remarks: '' },
+                { itemName: "莫拉利白葡萄酒", checked: false, remarks: '' },
                 { itemName: "喜力啤酒", checked: false, remarks: '' }
               ]
             },
@@ -276,9 +282,9 @@ Page({
               checkNum: [3, 2],//3选2
               open: true,//是否展开
               list: [
-                { itemName: "哈哈哈", norm: [{ name: "类型", value: ["哈", "哈哈", "哈哈哈", "哈哈哈哈"], chkIndex: 0 },], checked: false, checkNorm: ["哈"], normText: "铁板", remarks: ''},
-                { itemName: "呵呵呵", checked: false, remarks: ''},
-                { itemName: "嘎嘎嘎", checked: false, remarks: ''}
+                { itemName: "哈哈哈", norm: [{ name: "类型", value: ["哈", "哈哈", "哈哈哈", "哈哈哈哈"], chkIndex: 0 },], checked: false, checkNorm: ["哈"], normText: "铁板", remarks: '' },
+                { itemName: "呵呵呵", checked: false, remarks: '' },
+                { itemName: "嘎嘎嘎", checked: false, remarks: '' }
               ]
             }
           ]
@@ -293,6 +299,7 @@ Page({
         isGood: true,
         spicy: 2,
         price: "121.00",
+        itemPrice: '',
         avatar: 'https://wx.qlogo.cn/mmopen/Q3auHgzwzM7eQhicv7SbAE5oxGd4XQVPzmgU5R0SWOTiavIUBynUuiacWJooAy41bRyhk7LrMPLyn5HppywDXyNwoATT88FL7ejtJZ5KaolQps/0',
         num: 0
       },
@@ -305,6 +312,7 @@ Page({
         isGood: true,
         spicy: 0,
         price: "120.00",
+        itemPrice: '',
         avatar: 'https://wx.qlogo.cn/mmopen/Q3auHgzwzM7eQhicv7SbAE5oxGd4XQVPzmgU5R0SWOTiavIUBynUuiacWJooAy41bRyhk7LrMPLyn5HppywDXyNwoATT88FL7ejtJZ5KaolQps/0',
         num: 0,
         norm: [
@@ -339,6 +347,7 @@ Page({
         isGood: false,
         spicy: 3,
         price: "106.00",
+        itemPrice: '',
         num: 0,
         packageData: true
       },
@@ -351,6 +360,7 @@ Page({
         isGood: true,
         spicy: 2,
         price: "121.00",
+        itemPrice: '',
         num: 0
       },
       {
@@ -362,6 +372,7 @@ Page({
         isGood: true,
         spicy: 0,
         price: "120.00",
+        itemPrice: '',
         num: 0,
         norm: [
           {
@@ -395,6 +406,7 @@ Page({
         isGood: false,
         spicy: 3,
         price: "106.00",
+        itemPrice: '',
         num: 0,
         packageData: true
       },
@@ -863,7 +875,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady() {
-   
+
   },
 
   /**
@@ -871,27 +883,13 @@ Page({
    */
   onShow() {
     let that = this;
-    let goods = that.data.goods;
-    let curGoodsItem;
-    let setData = {};
     let carList;
     //获取storage信息
-    curGoodsItem = wx.getStorageSync("curGoodsItem") ? JSON.parse(wx.getStorageSync("curGoodsItem")) : false;
     carList = wx.getStorageSync("carList") ? JSON.parse(wx.getStorageSync("carList")) : false;
-    if (curGoodsItem && carList) {
-      goods.map((item)=>{
-        if (item.id === curGoodsItem.id ) {
-          return item.num += 1;
-        }
-      })
-      setData["carList"] = carList
-      setData["goods"] = goods
-      that.cartCount(setData, curGoodsItem, "add");
-      wx.removeStorageSync("curGoodsItem");
+    if (carList) {
+      that.cartCount(carList);
       wx.removeStorageSync("carList");
     }
-    //设置data
-    that.setData(setData);
   },
   /**
    * 生命周期函数--监听页面隐藏
@@ -904,7 +902,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-    
+
   },
 
   /**
@@ -945,7 +943,7 @@ Page({
   // 清空购物车
   emptyCart() {
     let that = this;
-    this.setData({ "layer.confirm": true })
+    that.setData({ "layer.confirm": true })
   },
   // 取消清空购物车
   cancelAction() {
@@ -955,6 +953,7 @@ Page({
   closeActionSheet() {
     this.setData({ "layer.actionSheet": false });
   },
+  confirmOrder() { },
   // 确认清空购物车
   confirmAction() {
     var that = this;
@@ -973,10 +972,8 @@ Page({
     setData["goods"] = goods;//商品列表数量复原
     setData["cartStatistisc"] = cartStatistisc;//购物车统计清空
     // 把goods所有对象num不为0的设置为0
-    goods.forEach((item, index) => {
-      if (item.num !== 0) {
-        goods[index].num = 0
-      }
+    goods.map((item) => {
+      item.num = 0;
     })
     setData["goods"] = goods;//商品列表数量复原
     that.setData(setData);
@@ -985,127 +982,121 @@ Page({
   goodsHandle(event) {
     let that = this;
     let data = event.target.dataset;
-    let curId = data.customdata[0];
-    let control = data.customdata[1];
+    let curId = data.customdata[1];
+    let control = data.customdata[0];
     let goods = that.data.goods;
     let carList = that.data.carList;
     let layer = that.data.layer;
-    let curGoodsItem;
+    let curGoodsItem = {};
     let curCartIndex;
     let findItem;
     let setData = {};
-    curGoodsItem = goods.find((item)=>{
-      return item.id === curId;
+    goods.find((item, index) => {
+      if(item.id === curId) {
+        return Object.assign(curGoodsItem, item);
+      };
     });
+    findItem = that.existCart(curGoodsItem);
+    if (findItem) {
+      curCartIndex = carList.findIndex((item)=>{
+        return item.id === findItem.id;
+      })
+    }
+    
     // 是否多规格
     if (curGoodsItem.norm) {
       layer.norm.show = true;
       setData["layer"] = layer;
       setData["curGoodsItem"] = curGoodsItem;
       that.setData(setData);
-      return 
+      return
     } else {
       // 是否为添加
       if (control === "add") {
-        findItem = that.existCart(curGoodsItem);
         if (findItem) {
-          carList.map((item) => {
-            if (item.id === curGoodsItem.id) {
-              return item.num += 1
-            }
-          });
-        }else{
+          carList[curCartIndex].num += 1;
+        } else {
+          curGoodsItem.num = 1;
           carList.unshift(curGoodsItem);
         }
-        goods.map((item) => {
-          if (item.id === curGoodsItem.id) {
-            item.num += 1
-          }
-        });
-      // 减少  
-      }else{
-        if (curGoodsItem.num === 1) {
-          curCartIndex = carList.findIndex((item) => {
-            return item.id === curGoodsItem.id;
-          });
-          carList.splice(curCartIndex, 1);
-        } else {
-          carList.map((item) => {
-            if (item.id === curGoodsItem.id) {
-              item.num -= 1
-            }
-          });
-        }
-        goods.map((item) => {
-          if (item.id === curGoodsItem.id) {
-            item.num -= 1
-          }
-        });
+        // 减少  
+      } else {
+        carList[curCartIndex].num -= 1;
       }
-      setData["goods"] = goods;
-      setData["carList"] = carList;
-      that.cartCount(setData, curGoodsItem, control);
+      carList.map((item) => {
+        if (item.id === curGoodsItem.id) {
+          item.itemPrice = (item.num * Number(item.price)).toFixed(2)
+        }
+      })
+      that.cartCount(carList, setData);
     }
   },
   //购物车列表控制器按钮
   cartHandle(event) {
     let that = this;
-    let index = event.target.dataset.index;
-    let control = event.target.dataset.control;
+    let data = event.target.dataset;
+    let control = data.customdata[0];
+    let curId = data.customdata[1];
+    let curIndex = data.customdata[2];
     let carList = that.data.carList;
-    let curIndex = carList[index].curIndex;
-    let curItem = that.data.goods[curIndex];
     let setData = {};
-    if (control === "red") {
-      if (carList[index].num === 1) {
-        carList.splice(index, 1)
-        setData["carList"] = carList;
-        setData["goods[" + curIndex + "].num"] = curItem.num - 1;
-        that.cartCount(setData, curIndex, control);
-        return false;
-      } else {
-        setData["carList[" + index + "].num"] = carList[index].num - 1;
-        setData["goods[" + curIndex + "].num"] = curItem.num - 1;
+    if (data.customdata.length === 3) {
+      if (control === "add") {
+        carList[curIndex].num += 1
+      } else if (control === "red") {
+        carList[curIndex].num -= 1
       }
-    } else {
-      setData["carList[" + index + "].num"] = carList[index].num + 1;
-      setData["goods[" + curIndex + "].num"] = curItem.num + 1;
     }
-    that.cartCount(setData, curIndex, control);
+    carList.map((item) => {
+      if (item.id === curId) {
+        item.itemPrice = (item.num * Number(item.price)).toFixed(2)
+      }
+    })
+    that.cartCount(carList, setData);
   },
   // 购物车价格和总数量统计
   /**
    * setData： 传入setData对象
-   * curIndex: 商品列表的index
+   * curCartIndex: 商品列表的index
    * control： 是添加还是减少
    */
-  cartCount(setData, curGoodsItem, control) {
+  cartCount(carList, setData={}) {
     let that = this;
-    let cartStatistisc = that.data.cartStatistisc;
+    let totalPrice = 0;
+    let totalCount = 0;
     let footerInfo = that.data.footerInfo;
-    //把总价转为数字型
-    let tmpNum = cartStatistisc.amount
-    let tmpPrice = Number(cartStatistisc.price);
-    let curPrice = Number(curGoodsItem.price);
-    if (control === "red") {
-      tmpNum -= 1;
-      tmpPrice -= curPrice;
-    } else {
-      tmpNum += 1;
-      tmpPrice += curPrice;
+    let goods = that.data.goods;
+    let cartStatistisc = {};
+    goods.map((item) => {
+      item.num = 0;
+    })
+    // 商品列表数据与列表数据同步
+    for (let i = 0; i < carList.length; i++) {
+      for (let j = 0; j < goods.length; j++) {
+        if (carList[i].id === goods[j].id) {
+          if (carList[i].num === 0) {
+            carList.splice(i,1);
+            break;
+          }
+          goods[j].num += carList[i].num;
+          totalPrice += Number(carList[i].itemPrice);
+          totalCount += carList[i].num;
+        }
+      }
     }
-    //计算最后把总价转为字符型
-    tmpPrice = tmpPrice.toFixed(2);
-    cartStatistisc.price = tmpPrice;
-    cartStatistisc.amount = tmpNum;
-    setData["cartStatistisc"] = cartStatistisc;
+    cartStatistisc.price = totalPrice.toFixed(2);
+    cartStatistisc.amount = totalCount;
+
     if (cartStatistisc.amount > 0) {
       footerInfo.state = 1;
       footerInfo.text = "选好了";
-    }else{
+    } else {
       footerInfo.state = 0;
       footerInfo.text = "查看订单";
     }
+    setData["carList"] = carList;
+    setData["goods"] = goods;
+    setData["cartStatistisc"] = cartStatistisc;
     setData["footerInfo"] = footerInfo;
     that.setData(setData);
   },
@@ -1120,8 +1111,8 @@ Page({
     return carList.find((cItem) => {
       if (cItem.norm) {
         return cItem.id === item.id && JSON.stringify(cItem.norm) === JSON.stringify(item.norm);
-      }else{
-       return cItem.id === item.id
+      } else {
+        return cItem.id === item.id
       }
     })
   },
@@ -1142,8 +1133,9 @@ Page({
     let that = this;
     let curGoodsItem = that.data.curGoodsItem;
     let carList = that.data.carList;
-    let goods = that.data.goods;
     let layer = that.data.layer;
+    let curCartIndex;
+    let findItem;
     let tmpNorm = [];
     let setData = {};
     //筛选出当前选择的规格商品
@@ -1151,28 +1143,27 @@ Page({
       tmpNorm.push(item.value[item.chkIndex]);
     })
     curGoodsItem.normText = tmpNorm.join("；");
-    let findItem = that.existCart(curGoodsItem);
+    findItem = that.existCart(curGoodsItem);
+    if (findItem){
+      curCartIndex = carList.findIndex((item)=>{
+        return item.id === findItem.id
+      })
+    }
     // 该商品是否存在购物车中
     if (findItem) {
-      carList.map((item) => {
-        if (item.id === curGoodsItem.id) {
-          item.num += 1
-        }
-      });
+      carList[curCartIndex].num += 1
     } else {
       curGoodsItem.num = 1;
       carList.unshift(curGoodsItem);
     }
-    goods.map((item) => {
-      if (item.id === curGoodsItem.id) {
-        item.num += 1
-      }
-    });
     layer.norm.show = false;
-    setData["carList"] = carList
-    setData["goods"] = goods;
+    carList.map((item) => {
+      if (item.id === curGoodsItem.id) {
+        item.itemPrice = (item.num * Number(item.price)).toFixed(2)
+      }
+    })
     setData["layer"] = layer;
-    that.cartCount(setData, curGoodsItem, "add");
+    that.cartCount(carList, setData);
   },
   //禁止删除
   forbidDel(event) {
@@ -1207,7 +1198,7 @@ Page({
     });
   },
   // 查看订单
-  viewOrder(){
+  viewOrder() {
     let that = this;
     let carList = that.data.carList;
     let categoryMenu = that.data.categoryMenu;

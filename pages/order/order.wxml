@@ -3,7 +3,7 @@
     <view class="header-item">
       <view class="iconfont"></view>
       <view class="item-desc">
-        现在<text class="highlighted"> {{orderDdata.peopleNum}} </text>人, 点了 <text class="highlighted"> {{orderDdata.foodsNum}} </text>个菜
+        现在<text class="highlighted"> {{orderDdata.peopleNum}} </text>人, 点了 <text class="highlighted"> {{orderDdata.goodsNum}} </text>个菜
       </view>
       <view class="highlighted">总计¥{{orderDdata.totalPrice}}</view>
     </view>
@@ -30,80 +30,97 @@
 
   <block wx:if="{{carList.length && categoryMenu.length}}">
     <view class="order-item" wx:for="{{categoryMenu}}" wx:key="index" wx:for-item="cItem">
-      <view class="item-title">{{cItem.name}} - <text class="highlighted">{{cItem.len}}</text></view>
-      <!-- <block wx:for="{{carList}}" wx:key="index">
-        <view class="item-goods"  wx:if="{{cItem.id === item.cid}}">
-          <image class="avatar" src="{{item.avatar}}"></image>
+      <view class="item-title">{{cItem.name}} - <text class="highlighted">{{cItem.num}}</text></view>
+      <block wx:for="{{carList}}" wx:key="index" wx:for-item="carItem">
+        <view class="item-goods" wx:if="{{cItem.id === carItem.cid}}">
+          <image class="avatar" src="{{carItem.avatar}}"></image>
           <view class="img-box">
-            <image src="{{item.goodsImg}}"></image>
+            <image src="{{carItem.goodsImg}}"></image>
           </view>
           <view class="godds-info">
             <view class="head">
-              <view class="name">{{item.name}}</view>
+              <view class="name">{{carItem.goodsName}}</view>
+              <view wx:if="{{!carItem.packageData}}" class="btn-remark" bindtap="remarkAction" data-open="{{true}}" data-customdata="{{[0,[carItem.id]]}}">
+                <text class="btn">备注</text>
+              </view>
             </view>
             <view class="control-price">
-              <view class="price">¥{{item.price}}</view>
+              <view class="price">¥{{ carItem.itemPrice}}</view>
               <view class="count-module">
-                <view class="iconfont icon-red" bindtap="goodsHandle" data-goodsinfo="{{['red',item.id]}}"></view>
-                <view class="num">{{item.num}}</view>
-                <view class="iconfont icon-add" bindtap="goodsHandle" data-goodsinfo="{{['add',item.id]}}"></view>
+                <view class="iconfont icon-red" bindtap="goodsHandle" data-customdata="{{['red',carItem.id]}}"></view>
+                <view class="num">{{carItem.num}}</view>
+                <view class="iconfont icon-add" bindtap="goodsHandle" data-customdata="{{['add',carItem.id]}}"></view>
               </view>
             </view>
-            <block wx:if="{{item.packageData.combination}}">
-              <view class="remarks-box packages">
-                <block wx:for="{{item.packageData.grouitem}}" wx:key="index" wx:for-index="i">
-                  <block wx:for="{{item.list}}" wx:key="index" wx:for-index="j">
-                    <view class="package-item" wx:if="{{item.checked}}">
-                      <view class="text">
-                        <view class="name">
-                          <text>{{item.itemName}}×{{item.num}}</text>
-                          <text class="norm" wx:if="{{item.normText && item.normText !== ''}}">{{item.normText}}</text>
+            <block wx:if="{{carItem.packageData}}">
+              <block wx:if="{{carItem.packageData.combination}}">
+                <view class="remarks-box packages">
+                  <block wx:for="{{carItem.packageData.groupItem}}" wx:key="index" wx:for-index="i">
+                    <block wx:for="{{item.list}}" wx:key="index" wx:for-index="j">
+                      <view class="package-item" wx:if="{{item.checked}}">
+                        <view class="text">
+                          <view class="name">
+                            <text>{{item.itemName}}×{{carItem.num}}</text>
+                            <text class="norm" wx:if="{{item.normText && item.normText !== ''}}">{{item.normText}}</text>
+                          </view>
+                          <view class="remarks-txt" wx:if="{{item.remarks !== ''}}">备注：{{item.remarks}}</view>
                         </view>
-                        <view class="remarks-txt" wx:if="{{item.remarks !== ''}}">备注：{{item.remarks}}</view>
+                        <view class="btn-remark" bindtap="remarkAction" data-open="{{true}}" data-customdata="{{[1,[carItem.id,i,j]]}}">
+                          <text class="btn">备注</text>
+                        </view>
                       </view>
-                      <view class="btn-remark" bindtap="remarkAction" data-open="{{true}}" data-markinfo="{{[1,[item.id,i,j]]}}">
-                        <text class="btn">备注</text>
-                      </view>
-                    </view>
+                    </block>
                   </block>
-                </block>
-              </view>
+                </view>
+              </block>
+              <block wx:else>
+                <view class="remarks-box packages">
+                  <view class="package-item" wx:for="{{carItem.packageData.list}}" wx:key="index" wx:for-index="k">
+                    <view class="text">
+                      <view class="name">
+                        <text>{{item.itemName}}×{{carItem.num}}</text>
+                        <text class="norm" wx:if="{{item.normText && item.normText !== ''}}">{{item.normText}}</text>
+                      </view>
+                      <view class="remarks-txt" wx:if="{{item.remarks !== ''}}">备注：{{item.remarks}}</view>
+                    </view>
+                    <view class="btn-remark" bindtap="remarkAction" data-open="{{true}}" data-customdata="{{[1,[carItem.id,k]]}}">
+                      <text class="btn">备注</text>
+                    </view>
+                  </view>
+                </view>
+              </block>
             </block>
             <block wx:else>
-              <view class="remarks-box packages">
-                <view class="package-item" wx:for="{{item.packageData.list}}" wx:key="index" wx:for-index="k">
+              <view class="remarks-box " wx:if="{{carItem.normText && item.normText !== '' || carItem.remarks !== ''}}">
+                <view class="package-item">
                   <view class="text">
-                    <view class="name">
-                      <text>{{item.itemName}}×{{item.num}}</text>
-                      <text class="norm" wx:if="{{item.normText && item.normText !== ''}}">{{item.normText}}</text>
+                    <view class="name" wx:if="{{carItem.normText && carItem.normText !== ''}}">
+                      <text>{{carItem.normText}}</text>
                     </view>
-                    <view class="remarks-txt" wx:if="{{item.remarks !== ''}}">备注：{{item.remarks}}</view>
-                  </view>
-                  <view class="btn-remark" bindtap="remarkAction" data-open="{{true}}" data-markinfo="{{[1,[item.id,k]]}}">
-                    <text class="btn">备注</text>
+                    <view class="remarks-txt" wx:if="{{carItem.remarks !== ''}}">备注：{{carItem.remarks}}</view>
                   </view>
                 </view>
               </view>
             </block>
           </view>
         </view>
-      </block> -->
+      </block>
     </view>
   </block>
 
-  <!-- <view class="footer">
-    <block wx:if="{{(packages.length || foods.length) && orderState === 0}}">
+  <view class="footer">
+    <block wx:if="{{carList.length && orderState === 0}}">
       <view class="btn btn-base other" bindtap="navigateIndex">点菜</view>
       <view class="btn btn-base" bindtap="submitOrder">下单</view>
     </block>
-    <block wx:elif="{{(packages.length || foods.length) && orderState === 1}}">
+    <block wx:elif="{{carList.length && orderState && orderState === 1}}">
       <view class="btn btn-base other" bindtap="navigateIndex">加菜</view>
       <view class="btn btn-base" bindtap="submitOrder">下单</view>
     </block>
     <block wx:else>
       <view class="btn btn-base" bindtap="navigateIndex">点菜</view>
     </block>
-  </view> -->
+  </view>
 </view>
 
 <!--选择用餐人数  -->
@@ -145,7 +162,7 @@
       <view class="layer-title">备注</view>
     </view>
     <view class="layer-page-content">
-      <textarea placeholder="请输入口味、偏好等" value="{{tmpMarkTxt}}" auto-focus="true" focus="true" fixed bindinput="remarkInpput"/>
+      <textarea placeholder="请输入口味、偏好等" value="{{tmpMarkTxt}}" auto-focus="true" focus="true" fixed bindinput="remarkInpput" />
     </view>
     <view class="layer-button">
       <view class="btn no" bindtap="remarkAction" data-open="{{false}}">取消</view>
@@ -165,7 +182,24 @@
       {{layer.tips.text}}
     </view>
     <view class="layer-button">
-      <view class="btn yes">确定</view>
+      <view class="btn yes" bindtap="successOrder">确定</view>
+    </view>
+  </view>
+</view>
+
+<!--多人点重  -->
+<view class="layer-area layer-tips" wx:if="{{layer.repeatTips.show}}">
+  <view class="layer-shade"></view>
+  <view class="layer-page">
+    <view class="layer-page-header" wx:if="{{layer.tips.title !== ''}}">
+      <view class="layer-title">多人点重</view>
+    </view>
+    <view class="layer-page-content">
+      现有多份菜品点重，确定下单？
+    </view>
+    <view class="layer-button">
+      <view class="btn no" bindtap="cancelOrder">取消</view>
+      <view class="btn yes" bindtap="confirmOrder">确定</view>
     </view>
   </view>
 </view>

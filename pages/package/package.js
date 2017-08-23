@@ -30,21 +30,22 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    let that = this;
-    let curGoodsItem = wx.getStorageSync("curGoodsItem") ? JSON.parse(wx.getStorageSync("curGoodsItem")) : {};
-    let carList = wx.getStorageSync("carList") ? JSON.parse(wx.getStorageSync("carList")) : [];
-    let setData = {};
-    setData["curGoodsItem"] = curGoodsItem;
-    setData["carList"] = carList;
-    console.log(setData);
-    that.setData(setData);
+
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    let that = this;
+    let curGoodsItem = wx.getStorageSync("curGoodsItem") ? JSON.parse(wx.getStorageSync("curGoodsItem")) : {};
+    let carList = wx.getStorageSync("carList") ? JSON.parse(wx.getStorageSync("carList")) : [];
+    let setData = {};
+    setData["curGoodsItem"] = curGoodsItem;
+    setData["carList"] = carList;
+    that.setData(setData);
+    wx.removeStorageSync("curGoodsItem");
+    wx.removeStorageSync("carList");
   },
 
   /**
@@ -162,7 +163,6 @@ Page({
     setData["curGoodsItem"] = curGoodsItem;
     setData["layer.norm.show"] = false;
     that.setData(setData);
-
     //设置规格
   },
   // 关闭规格弹窗
@@ -184,8 +184,8 @@ Page({
     let checkNum = 0;
     let filterItem = [];
     let checkCount = 0;
+    let curCartIndex;
     let layer = that.data.layer;
-    let fineItem;
     let setData = {};
     // 是否是组合套餐
     if (curGoodsItem.packageData.combination) {
@@ -219,24 +219,25 @@ Page({
           layer.know.show = true;
           setData["layer"] = layer;
         }
-       return that.setData(setData);
+        return that.setData(setData);
       }
     }
-    curGoodsItem.num = 1;
     // 把当前选择的套餐保存在本地
-    fineItem = carList.find((item) => {
+    curCartIndex = carList.findIndex((item, index) => {
       return item.id === curGoodsItem.id && JSON.stringify(item.packageData) === JSON.stringify(curGoodsItem.packageData);
     })
-    if (fineItem) {
-      carList.map((item) => {
-        if (item.id === curGoodsItem.id && JSON.stringify(item.packageData) === JSON.stringify(curGoodsItem.packageData)) {
-          item.num += 1;
-        }
-      })
+    if (curCartIndex !== -1) {
+      carList[curCartIndex].num += 1;
     } else {
+      curGoodsItem.num = 1;
       carList.unshift(curGoodsItem)
     }
-    wx.setStorageSync("curGoodsItem", JSON.stringify(curGoodsItem));
+    
+    carList.map((item) => {
+      if (item.id === curGoodsItem.id) {
+        item.itemPrice = (item.num * Number(item.price)).toFixed(2)
+      }
+    })
     wx.setStorageSync("carList", JSON.stringify(carList));
     wx.navigateBack()
   },
